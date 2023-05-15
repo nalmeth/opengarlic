@@ -32,5 +32,8 @@
     "concurrently": "^8.0.1",
     "cross-env": "^7.0.3",
     "env-cmd": "^10.1.0"
+  },
+  "overrides": {
+	"nth-check": "2.1.1"
   }
 }
