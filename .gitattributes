@@ -1,0 +1,7 @@
+# Stop shell scripts from getting crlf so they will run properly
+*.sh text eol=lf
+*.pem eol=lf
+
+*.png binary
+*.jpg binary
+*.cur binary

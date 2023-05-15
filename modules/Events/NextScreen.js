@@ -1,0 +1,34 @@
+import * as Lobby from '../Lobby.js';
+import Logger from '../Logger.js';
+
+const NextScreen = async(io, socket, data) => {
+	Logger.info(`NEXTSCR ${data.lobbyCode}`);
+
+	let lobby = null;
+	let lobbyData = {};
+
+	try {
+
+		lobby = await Lobby.nextScreen(data.lobbyCode);
+
+		if(!await Lobby.setLobbyData(data.lobbyCode, data.lobbyData)) {
+			throw new Error('Unable to store lobby data');
+		}
+
+		lobbyData = await Lobby.getLobbyData(data.lobbyCode);
+
+	} catch(err) {
+		Logger.error(`Error moving to the next screen ${data.lobbyCode}`);
+		socket.emit('error', {
+			type: 'NextScreen',
+			message: err.message
+		});
+		return;
+	}
+
+	io.in(data.lobbyCode).emit('NextScreen');
+	io.in(data.lobbyCode).emit('LobbyDataUpdate', lobbyData);
+	io.in(data.lobbyCode).emit('LobbyUpdated', lobby);
+}
+
+export default NextScreen;

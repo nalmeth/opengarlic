@@ -1,0 +1,36 @@
+{
+  "name": "opengarlic.server",
+  "version": "1.0.0",
+  "description": "Express Server Hosting OpenGarlic",
+  "type": "module",
+  "engines": {
+    "node": ">=18.x"
+  },
+  "main": "server.js",
+  "scripts": {
+    "start": "node -r dotenv/config server.js",
+    "build": "env-cmd --use-shell \"cd client/ && npm install && npm run build\"",
+    "dev-server": "cross-env NODE_ENV=development node -r dotenv/config server.js",
+    "dev-client": "env-cmd --use-shell \"cd client && npm start\"",
+    "dev": "concurrently --kill-others-on-fail \"npm run dev-server\" \"npm run dev-client\""
+  },
+  "dependencies": {
+    "@socket.io/admin-ui": "^0.5.1",
+    "body-parser": "^1.20.2",
+    "cookie-parser": "^1.4.6",
+    "dotenv": "^16.0.3",
+    "express": "^4.18.2",
+    "helmet": "^7.0.0",
+    "nanoid": "^4.0.2",
+    "pino": "^8.14.1",
+    "rate-limiter-flexible": "^2.4.1",
+    "redis": "^4.6.6",
+    "serve-favicon": "^2.5.0",
+    "socket.io": "^4.6.1"
+  },
+  "devDependencies": {
+    "concurrently": "^8.0.1",
+    "cross-env": "^7.0.3",
+    "env-cmd": "^10.1.0"
+  }
+}

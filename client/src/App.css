@@ -1,0 +1,95 @@
+@font-face {
+	font-family: 'opengarlic';
+	src: url('./fonts/opengarlic.eot?89530187');
+	src: url('./fonts/opengarlic.eot?89530187#iefix') format('embedded-opentype'),
+		 url('./fonts/opengarlic.woff2?89530187') format('woff2'),
+		 url('./fonts/opengarlic.woff?89530187') format('woff'),
+		 url('./fonts/opengarlic.ttf?89530187') format('truetype'),
+		 url('./fonts/opengarlic.svg?89530187#opengarlic') format('svg');
+	font-weight: normal;
+	font-style: normal;
+}
+
+[class^="i-"]::before,[class*="i-"]::before {
+	font-family: "opengarlic";
+	font-weight: normal;
+	font-style: normal;
+}
+
+.i-linetool::before {
+	content: '\e800';
+}
+
+* {
+	scrollbar-width: auto;
+	scrollbar-color: #494949 #262626;
+}
+*::-webkit-scrollbar {
+	width: 15px;
+}
+*::-webkit-scrollbar-track {
+	background: #262626;
+}
+*::-webkit-scrollbar-thumb {
+	background-color: #494949;
+}
+
+.bubble-container{
+	margin-bottom: 8px;
+	display:flex;
+	align-items: center;
+}
+
+.bubble-direction-reverse {
+	margin-top: 8px;
+	flex-direction: row-reverse;
+}
+
+.bubble{
+	background-color: #F2F2F2;
+	border-radius: 5px;
+	box-shadow: 0 0 6px #B2B2B2;
+	display: block;
+	padding: 10px 18px;
+	position: relative;
+	color: white;
+	word-wrap: break-word;
+	min-height: 40px;
+}
+
+.bubble::before {
+	background-color: #F2F2F2;
+	content: "\00a0";
+	display: block;
+	height: 16px;
+	position: absolute;
+	top: 15px;
+	transform:             rotate( 29deg ) skew( -35deg );
+		-moz-transform:    rotate( 29deg ) skew( -35deg );
+		-ms-transform:     rotate( 29deg ) skew( -35deg );
+		-o-transform:      rotate( 29deg ) skew( -35deg );
+		-webkit-transform: rotate( 29deg ) skew( -35deg );
+	width:  20px;
+}
+
+.playerLeft {
+	background-color: #8f5db7;
+	margin-left: 8px;
+}
+
+.playerLeft::before {
+	box-shadow: -2px 2px 2px 0 rgba( 178, 178, 178, .4 );
+	left: -10px;
+	background-color: #8f5db7;
+}
+
+.playerRight {
+	background-color: #087FFE;
+	margin-right: 23px;
+}
+
+.playerRight::before {
+	box-shadow: 2px -2px 2px 0 rgba( 178, 178, 178, .4 );
+	right: -9px;
+	background-color: #087FFE;
+}
