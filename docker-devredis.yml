@@ -1,9 +1,0 @@
-version: '3.9'
-services:
-
-  devredis:
-    image: redis/redis-stack:latest
-    restart: unless-stopped
-    ports:
-      - "6379:6379"
-      - "8001:8001"
