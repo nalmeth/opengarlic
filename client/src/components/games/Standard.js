@@ -104,7 +104,7 @@ const Standard = ({
 		PlayersDone: (lobby, lobbyData) => {
 			console.log('All Players Done', shouldMoveNext.current);
 			if(!shouldMoveNext.current) return;
-			console.log('Moving next');
+			// console.log('Moving next');
 			shouldMoveNext.current = true;
 			const newData = prepareLobbyData(lobby, lobbyData);
 
