@@ -53,7 +53,7 @@ const Screen2 = ({
 	 * Handle Done Event
 	 */
 	const handleDone = () => {
-		console.log('Done pressed');
+		// console.log('Done pressed');
 		setRemaining(prevRem => settings.time);
 		onDone(nxtPlayerName, playerData);
 	}
@@ -62,7 +62,7 @@ const Screen2 = ({
 	 * Handle Quit Event
 	 */
 	const handleQuit = () => {
-		console.log('Screen2 quit');
+		// console.log('Screen2 quit');
 		setRemaining(prevRem => settings.time);
 		onQuit();
 	}

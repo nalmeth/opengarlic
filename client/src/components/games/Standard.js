@@ -102,7 +102,7 @@ const Standard = ({
 	 */
 	const events = Object.freeze({
 		PlayersDone: (lobby, lobbyData) => {
-			console.log('All Players Done', shouldMoveNext.current);
+			// console.log('All Players Done', shouldMoveNext.current);
 			if(!shouldMoveNext.current) return;
 			// console.log('Moving next');
 			shouldMoveNext.current = true;
@@ -147,13 +147,13 @@ const Standard = ({
 	 * Attach Standard mode events
 	 */
 	useEffect(() => {
-		console.log('Attach Standard Events');
+		// console.log('Attach Standard Events');
 		for(const name in events) {
 			socket.on(name, events[name]);
 		}
 
 		return () => {
-			console.log('Detach Standard Events');
+			// console.log('Detach Standard Events');
 			for(const name in events) {
 				socket.off(name, events[name]);
 			}
@@ -197,7 +197,7 @@ const Standard = ({
 	 * Handles Quit Event
 	 */
 	const handleQuit = () => {
-		console.log('Standard Quit.');
+		// console.log('Standard Quit.');
 		setIsDone(prevDone => false);
 		onQuit();
 	}

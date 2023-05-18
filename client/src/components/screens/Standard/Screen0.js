@@ -37,7 +37,7 @@ const Screen0 = ({
 	 * Handles Done Event
 	 */
 	const handleDone = () => {
-		console.log('Done pressed');
+		// console.log('Done pressed');
 		setRemaining(prevRem => settings.time);
 		onDone(playerName, playerData);
 	}
@@ -46,7 +46,7 @@ const Screen0 = ({
 	 * Handles Quit Event
 	 */
 	const handleQuit = () => {
-		console.log('Screen0 quit');
+		// console.log('Screen0 quit');
 		setRemaining(prevRem => settings.time);
 		onQuit();
 	}

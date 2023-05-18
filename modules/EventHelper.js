@@ -23,7 +23,7 @@ const LeavePlayer = async (io, socket) => {
 
 	if(lobby === null) throw new Error('Lobby error during player leaving');
 
-	console.log(`status: ${lobby.status} players.length: ${lobby.players.length}`);
+	// console.log(`status: ${lobby.status} players.length: ${lobby.players.length}`);
 
 	// Leave the room on the socket
 	socket.leave(socket.data.lobbyCode);

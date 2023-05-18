@@ -112,8 +112,6 @@ const DrawingBoard = (props) => {
 			props.tool.name === DrawingTools.Fill.name  // Ignore Paint fill tool
 		) return;
 
-		console.log('mousedown');
-
 		isDrawing.current = true;
 		const stage = event.target.getStage();
 		const position = stage.getPointerPosition();
@@ -161,7 +159,7 @@ const DrawingBoard = (props) => {
 	}
 
 	// For now these just toggle our drawing flag
-	const handleMouseUp = () => { console.log('mouseup');isDrawing.current = false;	}
+	const handleMouseUp = () => { isDrawing.current = false;	}
 	const handleMouseLeave = () => { isDrawing.current = false; }
 
 	/**
@@ -322,14 +320,14 @@ const DrawingBoard = (props) => {
 				newShapeProps.fillColor = props.brushColor;
 				newShapeProps.tool = getFilledShapeType(inside.top.tool);
 			}
-			console.log('fill', shapeIdx);
+			// console.log('fill', shapeIdx);
 		}
 		// If the click was inside a stroke, change stroke color
 		else if(inside?.top.idx === null && inside?.stroke.idx !== null) {
 			newShapeProps.brushColor = props.brushColor;
 			newShapeProps.tool = inside.stroke.tool;
 			shapeIdx = inside.stroke.idx;
-			console.log('stroke', shapeIdx);
+			// console.log('stroke', shapeIdx);
 		}
 		// Click was not inside a shape (including stroke), this is a background click
 		else if(inside?.top.idx === null && inside?.stroke.idx === null) {
@@ -337,7 +335,7 @@ const DrawingBoard = (props) => {
 			newShapeProps.fillColor = props.brushColor;
 			newShapeProps.brushColor = props.brushColor;
 			shapeIdx = 0;
-			console.log('fill & stroke', shapeIdx);
+			// console.log('fill & stroke', shapeIdx);
 		}
 
 		// Update State

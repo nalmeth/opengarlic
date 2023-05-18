@@ -59,41 +59,41 @@ const App = ({ socket }) => {
 	 */
 	const events = Object.freeze({
 		LobbyCreated: (lobby) => {
-			console.log('LobbyCreated');
+			// console.log('LobbyCreated');
 			setGameLobby(prevLobby => lobby);
 		},
 		LeftLobby: () => {
-			console.log('LeftLobby');
+			// console.log('LeftLobby');
 			setGameLobby(prevLobby => emptyLobby);
 			setLobbyCode(prevCode => '');
 			setLobbyData(prevData => {});
 		},
 		KickedFromLobby: () => {
-			console.log('KickedFromLobby');
+			// console.log('KickedFromLobby');
 			setGameLobby(prevLobby => emptyLobby);
 			setLobbyCode(prevCode => '');
 			setLobbyData(prevData => {});
 		},
 		LobbyJoined: (lobby) => {
-			console.log('LobbyJoined', lobby);
+			// console.log('LobbyJoined', lobby);
 			setGameLobby(prevLobby => lobby);
 		},
 		LobbyUpdated: (lobby) => {
-			console.log('LobbyUpdated', lobby);
+			// console.log('LobbyUpdated', lobby);
 			setGameLobby(prevLobby => lobby);
 		},
 		LobbyDataUpdate: (lobbyData) => {
-			console.log('LobbyDataUpdated');
+			// console.log('LobbyDataUpdated');
 			setLobbyData(prevData => lobbyData);
 		},
 		DisconnectPlayer: (reason) => {
-			console.log('DisconnectPlayer');
+			// console.log('DisconnectPlayer');
 			setLobbyCode(prevCode => '');
 			setGameLobby(prevLobby => emptyLobby);
 			setLobbyData(prevData => {})
 		},
 		connect: () => {
-			console.log('Connected.');
+			// console.log('Connected.');
 			if(gameLobby?.code && shouldRejoin.current &&
 				 gameLobby?.status !== LobbyStatus.ENDED) {
 
@@ -109,14 +109,14 @@ const App = ({ socket }) => {
 		},
 		connect_error: (err) => console.error(err),
 		disconnect: (reason, details) => {
-			console.log('Disconnected');
+			// console.log('Disconnected');
 			console.warn(reason, details);
 		},
 		pong: () => {
-			console.log('PONG ', new Date().toISOString());
+			// console.log('PONG ', new Date().toISOString());
 		},
 		error: (err) => {
-			console.log('Error from server:');
+			// console.log('Error from server:');
 			setLobbyCode(prevCode => '');
 			setGameLobby(prevLobby => emptyLobby);
 			setLobbyData(prevData => {});
@@ -128,13 +128,13 @@ const App = ({ socket }) => {
 	 * On Init, setup our socket object
 	 */
 	useEffect(() => {
-		console.log('Attach App Events');
+		// console.log('Attach App Events');
 		for(const name in events) {
 			socket.on(name, events[name]);
 		}
 
 		return () => {
-			console.log('Detach App Events');
+			// console.log('Detach App Events');
 			for(const name in events) {
 				socket.off(name, events[name]);
 			}
@@ -159,13 +159,13 @@ const App = ({ socket }) => {
 	 * Handles Quit Event
 	 */
 	const handleQuit = () => {
-		console.log('App quit.');
+		// console.log('App quit.');
 
 		setGameLobby(prevLobby => emptyLobby);
 		setLobbyCode(prevCode => '');
 		setLobbyData(prevData => {});
 
-		console.log('Emit QuitLobby');
+		// console.log('Emit QuitLobby');
 		socket.emit('message', {
 			type: 'QuitLobby',
 			data: {
@@ -199,7 +199,7 @@ const App = ({ socket }) => {
 					playerName={playerName}
 					onNameChange={newName => setPlayerName(prevName => newName)}
 					onCreateClick={() => {
-						console.log('Create Lobby');
+						// console.log('Create Lobby');
 						socket.emit('message', {
 							type: 'CreateLobby',
 							data: {
@@ -211,7 +211,7 @@ const App = ({ socket }) => {
 					lobbyCode={lobbyCode}
 					onCodeChange={newCode => setLobbyCode(prevCode => newCode)}
 					onJoinClick={() => {
-						console.log('Join Lobby');
+						// console.log('Join Lobby');
 						socket.emit('message', {
 							type: 'JoinLobby',
 							data: {
@@ -271,7 +271,7 @@ const App = ({ socket }) => {
 					playerName={playerName}
 					lobbyData={lobbyData}
 					onGameEnd={() => {
-						console.log('Game End');
+						// console.log('Game End');
 						socket.emit('message', {
 							type: 'EndGame',
 							data: {
@@ -280,7 +280,7 @@ const App = ({ socket }) => {
 						});
 					}}
 					onRoundEnd={() => {
-						console.log(`End of Round: ${gameLobby.round}`);
+						// console.log(`End of Round: ${gameLobby.round}`);
 					}}
 					onDone={(playerData) => {
 						socket.emit('message', {

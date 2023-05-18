@@ -5,7 +5,7 @@ import { Switch } from "@mui/material"
 const GameSwitch = (props) => {
 
 	return (
-		<Switch defaultChecked />
+		<Switch {...props} />
 	)
 }
 

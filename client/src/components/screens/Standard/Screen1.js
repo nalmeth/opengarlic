@@ -54,7 +54,7 @@ const Screen1 = ({
 	 * Handle Quit Event
 	 */
 	const handleQuit = () => {
-		console.log('Clear remaining');
+		// console.log('Clear remaining');
 		setRemaining(prevRem => settings.time);
 		onQuit();
 	}
