@@ -99,7 +99,7 @@ const App = ({ socket }) => {
 
 				shouldRejoin.current = false;
 				socket.emit('message', {
-					type: 'ReJoinLobby',
+					type: 'JoinLobby',
 					data: {
 						playerName,
 						lobbyCode: gameLobby.code,

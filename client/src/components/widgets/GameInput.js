@@ -5,7 +5,6 @@ import { TextField } from "@mui/material";
  * Text entry input
  * props:
  * 		size			- Input size
- * 		onChange		- Callback for data change
  *
  * @param {object} props
  * @returns

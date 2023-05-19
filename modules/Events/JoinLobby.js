@@ -38,8 +38,10 @@ const JoinLobby = async(io, socket, data) => {
 	socket.data.playerName = data.playerName;
 	socket.data.lobbyCode = data.lobbyCode;
 
+	const lobbyData = await Lobby.getLobbyData(data.lobbyCode);
+	socket.emit('LobbyDataUpdate', lobbyData);
+
 	// Emit event with lobby data
-	Logger.info('joinlobby send update')
 	io.in(data.lobbyCode).emit('LobbyUpdated', lobby);
 }
 

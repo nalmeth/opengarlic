@@ -109,80 +109,69 @@ export const join = async (playerName, lobbyCode) => {
 	let lobby = await get(lobbyCode);
 	if(lobby === null) throw new Error(`Invalid Lobby ${lobbyCode}`);
 
-	// Lobby has ended - cannot join
-	if(lobby.status === LobbyStatus.ENDED) {
-		throw new Error(`Lobby ${lobbyCode} has ended.`);
-	}
-
-	const playerCount = parseInt(lobby?.players.length);
-	const mp = parseInt(lobby?.settings?.maxPlayers);
-	const maxPlayers = isNaN(mp) ? 15 : mp;
-
-	// Don't exceed max players
-	if(playerCount === maxPlayers) {
-		throw new Error(`Lobby ${lobbyCode} is full.`);
-	}
-
-	if(lobby.status === LobbyStatus.STARTED) {
-		throw new Error(`Lobby ${lobbyCode} has started. No new players allowed`);
-	}
-
-	const playerNames = lobby.players.map((player) => player.name.toLowerCase());
-	// Don't allow duplicate player names
-	if(playerNames.includes(playerName.toLowerCase())) {
-		throw new Error(`Player ${playerName} already exists in lobby ${lobbyCode}`);
-	}
-
-	const newPlayer = {
-		name: playerName,
-		owner: false,
-		status: PlayerStatus.ACTIVE,
-		connected: ConnectionStatus.CONNECTED
-	}
-
-	await redisClient.json.arrAppend(
-		`lobby:${lobbyCode}`,
-		'.players',
-		newPlayer
-	);
-
-	return await get(lobbyCode);
-}
-
-/**
- * Rejoin the lobby
- * @param {string} playerName
- * @param {string} lobbyCode
- * @returns {object|null}
- */
-export const rejoin = async (playerName, lobbyCode) => {
-	Logger.info(`Lobby->rejoin ${playerName} ${lobbyCode}`);
-
-	let lobby = await get(lobbyCode);
-	if(lobby === null) throw new Error(`Invalid Lobby ${lobbyCode}`);
-
 	// Find player in lobby
 	const idx = lobby.players.findIndex(
 		player => player.name.toLowerCase() === playerName.toLowerCase()
 	);
 
-	// If player is not already in the lobby and the game has ended, deny re-entry
-	if(idx === -1 && lobby.status === LobbyStatus.ENDED) {
-		throw new Error(`Lobby ${lobbyCode} has ended.`);
+	// If lobby has ended
+	if(lobby.status === LobbyStatus.ENDED) {
+
+		// if player is not in list, deny
+		if(idx === -1) {
+			throw new Error(`Lobby ${lobbyCode} has ended.`);
+		}
+
 	}
 
-	// If player status is disconnected, make them active again
-	if(lobby.players[idx].connected === ConnectionStatus.DISCONNECTED) {
-		await redisClient.json.set(
+	// If player is not in list, check availibility and add
+	if(idx === -1) {
+		if(lobby.status === LobbyStatus.STARTED) {
+			throw new Error(`Lobby ${lobbyCode} has started. No new players allowed`);
+		}
+
+		const playerCount = parseInt(lobby?.players.length);
+		const mp = parseInt(lobby?.settings?.maxPlayers);
+		const maxPlayers = isNaN(mp) ? 15 : mp;
+
+		// Don't exceed max players
+		if(playerCount === maxPlayers) {
+			throw new Error(`Lobby ${lobbyCode} is full.`);
+		}
+
+		const playerNames = lobby.players.map((player) => player.name.toLowerCase());
+		// Don't allow duplicate player names
+		if(playerNames.includes(playerName.toLowerCase())) {
+			throw new Error(`Player ${playerName} already exists in lobby ${lobbyCode}`);
+		}
+
+		const newPlayer = {
+			name: playerName,
+			owner: false,
+			status: PlayerStatus.ACTIVE,
+			connected: ConnectionStatus.CONNECTED
+		}
+
+		await redisClient.json.arrAppend(
 			`lobby:${lobbyCode}`,
-			`.players[${idx}].connected`,
-			ConnectionStatus.CONNECTED
+			'.players',
+			newPlayer
 		);
+
+	} else {
+
+		// This should be a rejoining player, mark them as connected again
+		if(lobby.players[idx].connected === ConnectionStatus.DISCONNECTED) {
+			await redisClient.json.set(
+				`lobby:${lobbyCode}`,
+				`.players[${idx}].connected`,
+				ConnectionStatus.CONNECTED
+			);
+		}
+
 	}
 
-	lobby = await get(lobbyCode);
-
-	return lobby;
+	return await get(lobbyCode);
 }
 
 /**
@@ -263,6 +252,7 @@ export const leave = async (playerName, lobbyCode) => {
 	try {
 
 		let players = await getPlayers(lobbyCode);
+		if(!players) return;
 
 		players = players.filter(player => player.name.toLowerCase() !== playerName);
 
@@ -506,6 +496,42 @@ export const getPlayer = async (playerName, lobbyCode) => {
 		player = null;
 	}
 	return player;
+}
+
+export const setPlayer = async (lobbyCode, playerName, playerObject) => {
+	try {
+
+		const lobby = await get(lobbyCode);
+		const newPlayers = lobby.players.map((player) => {
+			if(player.name !== playerName) return player;
+			return playerObject;
+		});
+
+		await redisClient.json.set(`lobby:${lobbyCode}`, '.players', newPlayers);
+
+	} catch(err) {
+		Logger.error(err);
+		return false;
+	}
+}
+
+export const setPlayers = async (lobbyCode, newPlayers) => {
+
+	let lobby = await get(lobbyCode);
+
+	try {
+
+		await redisClient.json.set(`lobby:${lobbyCode}`, '.players', newPlayers);
+
+		lobby = await get(lobbyCode);
+
+	} catch(err) {
+
+		Logger.error(err);
+		return null;
+	}
+
+	return lobby;
 }
 
 /**

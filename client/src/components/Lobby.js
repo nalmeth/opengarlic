@@ -2,9 +2,11 @@ import React, { useState } from "react";
 import Grid from '@mui/material/Unstable_Grid2';
 import {
 	Stack, Paper,
-	Typography, Button, useMediaQuery
+	Typography, Button, useMediaQuery, //Fab, Box
 } from "@mui/material";
 import GameButton from "./widgets/GameButton.js";
+// import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+// import { faGear } from "@fortawesome/free-solid-svg-icons";
 
 import Games from '../modules/Games';
 import PlayerStatus from '../modules/PlayerStatus';
@@ -80,11 +82,23 @@ const Lobby = ({
 									cursor: 'pointer'
 								}}
 								onClick={() => {
+									if(owner !== playerName) return;
 									setSelectedMode(prevMode => mode.title);
 									setSelectedModeSettings(prevSettings => mode.settings);
 								}}
 							>
 								<Typography variant={isSmall ? 'body2' : 'body1'}>{mode.title}</Typography>
+								{/* {owner === playerName &&
+								<Box justifyContent="flex-end">
+									<Fab size="small" sx={{
+										'&.MuiButtonBase-root:hover': {
+											bgcolor: '#90caf9'
+										}
+									}}>
+										<FontAwesomeIcon icon={faGear} />
+									</Fab>
+								</Box>
+								} */}
 							</Grid>
 						)
 					})}
