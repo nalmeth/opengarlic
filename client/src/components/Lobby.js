@@ -2,11 +2,11 @@ import React, { useState } from "react";
 import Grid from '@mui/material/Unstable_Grid2';
 import {
 	Stack, Paper,
-	Typography, Button, useMediaQuery, //Fab, Box
+	Typography, Button, useMediaQuery, Fab, Box
 } from "@mui/material";
 import GameButton from "./widgets/GameButton.js";
-// import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-// import { faGear } from "@fortawesome/free-solid-svg-icons";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faGear } from "@fortawesome/free-solid-svg-icons";
 
 import Games from '../modules/Games';
 import PlayerStatus from '../modules/PlayerStatus';
@@ -37,7 +37,15 @@ const Lobby = ({
 	const [selectedModeSettings, setSelectedModeSettings] = useState(Games[0].settings);
 
 	const displayPlayers = players.filter(player => player.status !== PlayerStatus.DISCONNECTED);
-	const isSmall = useMediaQuery(theme => theme.breakpoints.down('md'));
+
+	const isXS = useMediaQuery(theme => theme.breakpoints.only('xs'));
+	const isSM = useMediaQuery(theme => theme.breakpoints.only('sm'));
+
+	const isSmall = isXS || isSM;
+
+	let fabRight = 0;
+	if(isXS) fabRight = 15;
+	if(isSM) fabRight = 5;
 
 	return (
 		<>
@@ -88,17 +96,30 @@ const Lobby = ({
 								}}
 							>
 								<Typography variant={isSmall ? 'body2' : 'body1'}>{mode.title}</Typography>
-								{/* {owner === playerName &&
-								<Box justifyContent="flex-end">
-									<Fab size="small" sx={{
-										'&.MuiButtonBase-root:hover': {
-											bgcolor: '#90caf9'
-										}
-									}}>
+								{owner === playerName &&
+								<Box
+									justifyContent="flex-end"
+									sx={{
+										minHeight: 80,
+										minWidth: 125,
+										position: 'relative'
+									}}
+								>
+									<Fab
+										size="small"
+										sx={{
+											'&.MuiButtonBase-root:hover': {
+												bgcolor: '#90caf9'
+											},
+											position: 'absolute',
+											bottom: 0,
+											right: fabRight
+										}}
+									>
 										<FontAwesomeIcon icon={faGear} />
 									</Fab>
 								</Box>
-								} */}
+								}
 							</Grid>
 						)
 					})}
