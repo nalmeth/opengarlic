@@ -24,7 +24,7 @@ const Screen2 = ({
 	/**
 	 * Timer state
 	 */
-	const [remaining, setRemaining] = useLocalStorage('remaining',()=>settings.time);
+	const [remaining, setRemaining] = useLocalStorage('remaining',()=>settings.timer);
 
 	/**
 	 * Cleanup when this screen unmounts
@@ -32,7 +32,7 @@ const Screen2 = ({
 	useEffect(() => {
 		return () => {
 			setPlayerData(prevData => '');
-			setRemaining(prevRem => settings.time);
+			setRemaining(prevRem => settings.timer);
 		}
 		// eslint-disable-next-line
 	},[]);
@@ -54,7 +54,7 @@ const Screen2 = ({
 	 */
 	const handleDone = () => {
 		// console.log('Done pressed');
-		setRemaining(prevRem => settings.time);
+		setRemaining(prevRem => settings.timer);
 		onDone(nxtPlayerName, playerData);
 	}
 
@@ -63,7 +63,7 @@ const Screen2 = ({
 	 */
 	const handleQuit = () => {
 		// console.log('Screen2 quit');
-		setRemaining(prevRem => settings.time);
+		setRemaining(prevRem => settings.timer);
 		onQuit();
 	}
 
@@ -92,7 +92,7 @@ const Screen2 = ({
 			</GameButton>
 			<GameTimer
 				timerKey="timer3"
-				duration={settings.time}
+				duration={settings.timer}
 				initialRemainingTime={remaining}
 				onUpdate={remain => setRemaining(prevRem => remain)}
 				onComplete={handleDone}

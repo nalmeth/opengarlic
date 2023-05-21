@@ -1,7 +1,7 @@
 import { getConnection } from "../RedisConnectionManager.js";
 import { Writable } from 'stream';
 import { nanoid } from "nanoid";
-import { isEmpty, isPositiveNumber } from "../Helpers.js";
+import { isEmpty, isNumber } from "../Helpers.js";
 
 // Skip connecting if we aren't logging to redis
 const redisClient = await getConnection({
@@ -45,7 +45,7 @@ const RedisLogger = new Writable({
 		data.key = nanoid();
 		try {
 			expire = Object.hasOwn(data, 'expire')
-						&& isPositiveNumber(data.expire) ?
+						&& (isNumber(data.expire) && Number(data.expire > 0)) ?
 							expire = data.expire : autoExpire[data.level];
 
 			logKey = `log:${data.level}:${data.key}`;

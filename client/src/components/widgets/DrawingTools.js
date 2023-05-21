@@ -126,7 +126,7 @@ const DrawToolPanel = ({
 				// valueLabelFormat={(val)=>`Brush Size ${val}`}
 				size="small"
 				min={1}
-				max={20}
+				max={40}
 				onChangeCommitted={(e, val) => setTool('strokeWidth', val)}
 				aria-labelledby="stroke-slider"
 			/>

@@ -20,7 +20,7 @@ const Screen0 = ({
 	/**
 	 * Timer state
 	 */
-	const [remaining, setRemaining] = useLocalStorage('remaining', ()=>settings.time);
+	const [remaining, setRemaining] = useLocalStorage('remaining', ()=>settings.timer);
 
 	/**
 	 * Cleanup when this screen unmounts
@@ -28,7 +28,7 @@ const Screen0 = ({
 	useEffect(() => {
 		return () => {
 			setPlayerData(prevData => '');
-			setRemaining(prevRem => settings.time);
+			setRemaining(prevRem => settings.timer);
 		}
 		// eslint-disable-next-line
 	},[]);
@@ -38,7 +38,7 @@ const Screen0 = ({
 	 */
 	const handleDone = () => {
 		// console.log('Done pressed');
-		setRemaining(prevRem => settings.time);
+		setRemaining(prevRem => settings.timer);
 		onDone(playerName, playerData);
 	}
 
@@ -47,7 +47,7 @@ const Screen0 = ({
 	 */
 	const handleQuit = () => {
 		// console.log('Screen0 quit');
-		setRemaining(prevRem => settings.time);
+		setRemaining(prevRem => settings.timer);
 		onQuit();
 	}
 
@@ -65,13 +65,13 @@ const Screen0 = ({
 				autoFocus={true}
 				label="Enter a word or phrase"
 				disabled={isDone}
-				onChange={(data) => setPlayerData(data)}
+				onUpdate={(data) => setPlayerData(data)}
 				value={playerData}
 			/>
 			<GameButton disabled={isDone} onClick={handleDone}>Done</GameButton>
 			<GameTimer
 				timerKey="timer1"
-				duration={settings.time}
+				duration={settings.timer}
 				initialRemainingTime={remaining}
 				onUpdate={remain => setRemaining(prevRem => remain)}
 				onComplete={handleDone}

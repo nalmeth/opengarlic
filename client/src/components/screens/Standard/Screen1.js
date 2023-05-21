@@ -23,7 +23,7 @@ const Screen1 = ({
 	/**
 	 * Timer state
 	 */
-	const [remaining, setRemaining] = useLocalStorage('remaining',()=>settings.time);
+	const [remaining, setRemaining] = useLocalStorage('remaining',()=>settings.timer);
 
 	/**
 	 * Calculate next player position and name
@@ -46,7 +46,7 @@ const Screen1 = ({
 	 * Handle Done Event
 	 */
 	const handleDone = () => {
-		setRemaining(prevRem => settings.time);
+		setRemaining(prevRem => settings.timer);
 		onDone(nxtPlayerName);
 	}
 
@@ -55,7 +55,7 @@ const Screen1 = ({
 	 */
 	const handleQuit = () => {
 		// console.log('Clear remaining');
-		setRemaining(prevRem => settings.time);
+		setRemaining(prevRem => settings.timer);
 		onQuit();
 	}
 
@@ -72,7 +72,7 @@ const Screen1 = ({
 				disabled
 				required={false}
 				label="Draw this"
-				defaultValue={displayText}
+				value={displayText}
 			/>
 			<GameButton
 				key="donebtn"
@@ -83,7 +83,7 @@ const Screen1 = ({
 			</GameButton>
 			<GameTimer
 				timerKey="timer2"
-				duration={settings.time}
+				duration={settings.timer}
 				initialTimeRemaining={remaining}
 				onUpdate={remain => setRemaining(prevRem => remain)}
 				onComplete={handleDone}

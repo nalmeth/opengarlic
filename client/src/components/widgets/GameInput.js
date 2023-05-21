@@ -1,22 +1,37 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { TextField } from "@mui/material";
 
 /**
  * Text entry input
- * props:
- * 		size			- Input size
  *
  * @param {object} props
  * @returns
  */
 const GameInput = (props) => {
 
-	const inputProps = {...props};
-	inputProps.size = props.size || "small";
-	inputProps.onChange = event => props.onChange(event.currentTarget.value);
+	let newProps = {
+		...props,
+		size: props.size ? props.size : 'small',
+		onChange: (event) => {
+			const newVal = event.target.value;
+			setValue(prevVal => newVal);
+			props.onUpdate(newVal);
+			event.preventDefault();
+		}
+	}
+
+	delete newProps.initialValue;
+	delete newProps.onUpdate;
+
+	const [value, setValue] = useState(
+		props.initialValue !== undefined ? props.initialValue : ''
+	);
 
 	return (
-		<TextField {...inputProps} />
+		<TextField
+			value={value}
+			{...newProps}
+		/>
 	)
 }
 

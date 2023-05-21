@@ -1,16 +1,18 @@
 import React, { useState } from "react";
 import Grid from '@mui/material/Unstable_Grid2';
 import {
-	Stack, Paper,
-	Typography, Button, useMediaQuery, //Fab, Box
+	Stack, Paper, Typography,
+	Button, useMediaQuery, Fab, Box
 } from "@mui/material";
+
 import GameButton from "./widgets/GameButton.js";
-// import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-// import { faGear } from "@fortawesome/free-solid-svg-icons";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faGear } from "@fortawesome/free-solid-svg-icons";
 
 import Games from '../modules/Games';
 import PlayerStatus from '../modules/PlayerStatus';
 import PlayerList from "./widgets/PlayerList.js";
+import SettingsDialog from "./SettingsDialog.js";
 
 
 /**
@@ -34,10 +36,33 @@ const Lobby = ({
 
 	// Set default mode into state
 	const [selectedMode, setSelectedMode] = useState(Games[0].title);
-	const [selectedModeSettings, setSelectedModeSettings] = useState(Games[0].settings);
 
+	const initSettings = (mode = Games[0]) => {
+		let initSettings = {}
+		mode.settings.forEach(setting => {
+			initSettings[setting.name] = setting.default;
+		});
+		return initSettings;
+	}
+
+	const [selectedModeSettings, setSelectedModeSettings] = useState(() => initSettings());
+
+	// Dialog states
+	const [dialogOpen, setDialogOpen] = useState(false);
+	const [dialogSettingsTitle, setDialogSettingsTitle] = useState(Games[0].title);
+	const [dialogSettings, setDialogSettings] = useState(Games[0].settings);
+
+	// Players to show
 	const displayPlayers = players.filter(player => player.status !== PlayerStatus.DISCONNECTED);
-	const isSmall = useMediaQuery(theme => theme.breakpoints.down('md'));
+
+	// Media queries to adjust styles based on size
+	const isXS = useMediaQuery(theme => theme.breakpoints.only('xs'));
+	const isSM = useMediaQuery(theme => theme.breakpoints.only('sm'));
+	const isSmall = isXS || isSM;
+
+	let fabRight = 0;
+	if(isXS) fabRight = 15;
+	if(isSM) fabRight = 5;
 
 	return (
 		<>
@@ -84,25 +109,62 @@ const Lobby = ({
 								onClick={() => {
 									if(owner !== playerName) return;
 									setSelectedMode(prevMode => mode.title);
-									setSelectedModeSettings(prevSettings => mode.settings);
+									setSelectedModeSettings(prevSettings => initSettings(mode));
+									setDialogSettingsTitle(prevTitle => mode.title);
+									setDialogSettings(prevSettings => mode.settings);
 								}}
 							>
 								<Typography variant={isSmall ? 'body2' : 'body1'}>{mode.title}</Typography>
-								{/* {owner === playerName &&
-								<Box justifyContent="flex-end">
-									<Fab size="small" sx={{
-										'&.MuiButtonBase-root:hover': {
-											bgcolor: '#90caf9'
-										}
-									}}>
+								{owner === playerName &&
+								<Box
+									justifyContent="flex-end"
+									sx={{
+										minHeight: 80,
+										minWidth: 125,
+										position: 'relative'
+									}}
+								>
+									<Fab
+										size="small"
+										sx={{
+											'&.MuiButtonBase-root:hover': {
+												bgcolor: '#90caf9'
+											},
+											position: 'absolute',
+											bottom: 0,
+											right: fabRight
+										}}
+										onClick={() => {
+											// console.log(`${selectedMode} ${mode.title}`)
+											if(selectedMode === mode.title) {
+												let updatedDiaglogSettings = [];
+												for(let setting of mode.settings) {
+													if(selectedModeSettings.hasOwnProperty(setting.name))
+														setting.default = selectedModeSettings[setting.name];
+													updatedDiaglogSettings.push(setting);
+												}
+												setDialogSettings(prevSettings => updatedDiaglogSettings);
+
+												// console.dir(updatedDiaglogSettings);
+											}
+											setDialogOpen(true);
+										}}
+									>
 										<FontAwesomeIcon icon={faGear} />
 									</Fab>
+
 								</Box>
-								} */}
+								}
 							</Grid>
 						)
 					})}
-
+					<SettingsDialog
+						dialogOpen={dialogOpen}
+						setDialogOpen={setDialogOpen}
+						dialogSettingsTitle={dialogSettingsTitle}
+						dialogSettings={dialogSettings}
+						onSave={settings => setSelectedModeSettings(prevSettings => settings)}
+					/>
 					{// Filler placeholders for game modes
 					Array(15).fill(1).map((_,i) => {
 						return (
@@ -139,12 +201,18 @@ const Lobby = ({
 							height: '100%'
 						}}
 					>
+						<Typography>{Games.map(mode => {
+							if(mode.title === selectedMode) return mode.description;
+							return '';
+						})}</Typography>
 					{
 					/**
 					 * Game Settings
 					 */
 					Object.keys(selectedModeSettings).map((key) => (
-						<Typography key={key} variant="caption">{`${key}: `}{selectedModeSettings[key]}</Typography>
+						<Typography key={key} variant="caption">{`${key}: `}
+						{selectedModeSettings[key]}
+						</Typography>
 					))}
 
 					{

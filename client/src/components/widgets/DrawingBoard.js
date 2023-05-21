@@ -3,7 +3,11 @@ import { Box } from '@mui/material';
 import { Stage, Layer, Line, Rect, Circle } from 'react-konva';
 
 import { DrawingTools } from "./DrawingTools";
-import { debounce } from "../../modules/Helpers.js";
+import {
+	debounce,
+	isInsideRect, isInsideRectStroke,
+	isInsideCircle, isInsideCircleStroke
+} from "../../modules/Helpers.js";
 
 /**
  * The Canvas Drawing Area
@@ -376,11 +380,11 @@ const DrawingBoard = (props) => {
 
 				case DrawingTools.RectFilled.name:
 				case DrawingTools.Rect.name:
-					if(isInsideRect(event, shape)) {
+					if(isInsideRect(event, shape, scale)) {
 						topTool = shape.tool;
 						topShape = idx;
 					}
-					if(isInsideRectStroke(event, shape)) {
+					if(isInsideRectStroke(event, shape, scale)) {
 						strokeTool = shape.tool;
 						topStroke = idx;
 					}
@@ -388,11 +392,11 @@ const DrawingBoard = (props) => {
 
 				case DrawingTools.CircleFilled.name:
 				case DrawingTools.Circle.name:
-					if(isInsideCircle(event, shape)) {
+					if(isInsideCircle(event, shape, scale)) {
 						topTool = shape.tool;
 						topShape = idx;
 					}
-					if(isInsideCircleStroke(event, shape)) {
+					if(isInsideCircleStroke(event, shape, scale)) {
 						strokeTool = shape.tool;
 						topStroke = idx;
 					}
@@ -413,102 +417,6 @@ const DrawingBoard = (props) => {
 				tool: strokeTool
 			}
 		};
-	}
-
-	/**
-	 * Return true if the click event was withing the bounds of a
-	 * circle (NOT including the stroke)
-	 * @param {object} event
-	 * @param {object} shape
-	 * @returns {boolean}
-	 */
-	const isInsideCircle = (event, shape) => {
-		const sw = Math.ceil(shape.strokeWidth/2);
-		const cx = shape.points[0] * scale;
-		const cy = shape.points[1] * scale;
-		const r = (shape.radius-sw) * scale;
-		const x = event.offsetX;
-		const y = event.offsetY;
-		// Calculates if a point is inside a circle given the circle center point and radius
-		return (x - cx) * (x - cx) + (y - cy) * (y - cy) <= r * r;
-	}
-
-	/**
-	 * Returns true if the click event was within the bounds of a
-	 * circle (Including the stroke)
-	 * @param {object} event
-	 * @param {object} shape
-	 * @returns {boolean}
-	 */
-	const isInsideCircleStroke = (event, shape) => {
-		const sw = Math.ceil(shape.strokeWidth/2);
-		const cx = shape.points[0] * scale;
-		const cy = shape.points[1] * scale;
-		const r = (shape.radius+sw) * scale;
-		const x = event.offsetX;
-		const y = event.offsetY;
-		// Calculates if a point is inside a circle given the circle center point and radius
-		return (x - cx) * (x - cx) + (y - cy) * (y - cy) <= r * r;
-	}
-
-	/**
-	 * Returns true if the click event was within the bounds of a
-	 * square (NOT including the stroke)
-	 * @param {object} event
-	 * @param {object} shape
-	 * @returns {boolean}
-	 */
-	const isInsideRect = (event, shape) => {
-		const points = shape.points;
-
-		// 1/2 the stroke width overlaps the square, so we
-		// Use a 'virtual' smaller square to detect inside the visual box
-		const sw = Math.ceil(shape.strokeWidth/2);
-
-		// top-left and bottom-right x coord
-		const [leftx, rightx] = points[0] < points[2] ?
-				[points[0]+sw, points[2]-sw] : [points[2]+sw, points[0]-sw];
-
-		// top-left and bottom-right y coord
-		const [lefty, righty] = points[1] < points[3] ?
-				[points[1]+sw, points[3]-sw] : [points[3]+sw, points[1]-sw];
-
-		// Account for scale
-		const [scaledLX, scaledLY, scaledRX, scaledRY] =
-				[leftx,lefty,rightx,righty].map(coord => coord * scale);
-
-		// Check if the click was within the bounds
-		return (scaledLX <= event.offsetX && scaledLY <= event.offsetY) &&
-				(scaledRX >= event.offsetX && scaledRY >= event.offsetY);
-	}
-
-	/**
-	 * Returns true if the click event was within the bounds of a
-	 * square (Including the stroke)
-	 * @param {object} event
-	 * @param {object} shape
-	 * @returns {boolean}
-	 */
-	const isInsideRectStroke = (event, shape) => {
-		const points = shape.points;
-		// Add stroke to size for comparision to see
-		// if it fits with the stroke included
-		const sw = Math.ceil(shape.strokeWidth/2);
-		// top-left and bottom-right x coord
-		const [leftx, rightx] = points[0] < points[2] ?
-				[points[0]-sw, points[2]+sw] : [points[2]-sw, points[0]+sw];
-
-		// top-left and bottom-right y coord
-		const [lefty, righty] = points[1] < points[3] ?
-				[points[1]-sw, points[3]+sw] : [points[3]-sw, points[1]+sw];
-
-				// Account for scale
-		const [scaledLX, scaledLY, scaledRX, scaledRY] =
-				[leftx,lefty,rightx,righty].map(coord => coord * scale);
-
-		// Check if the click was within the bounds
-		return (scaledLX <= event.offsetX && scaledLY <= event.offsetY) &&
-				(scaledRX >= event.offsetX && scaledRY >= event.offsetY);
 	}
 
 	/**

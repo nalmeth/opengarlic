@@ -6,6 +6,7 @@ import Screen1 from "../screens/Standard/Screen1.js";
 import Screen2 from "../screens/Standard/Screen2.js";
 import StdEndGame from "../screens/Standard/EndGame.js";
 import PlayerStatus from "../../modules/PlayerStatus.js";
+import GameNumericInput from "../widgets/GameNumericInput.js";
 
 
 /**
@@ -278,9 +279,50 @@ const Standard = ({
 export default Standard;
 
 export const title = 'Standard';
-export const description = '';
-export const settings = {
-	maxPlayers: 15,
-	groupSize: 1,
-	time: 0
-}
+export const description = 'Players take turns writing, drawing, guessing';
+export const settings = [
+	{
+		name: 'maxPlayers',
+		displayName: 'Max Players',
+		default: 15,
+		component: (newProps) => {
+			let props = {
+				initialValue: 15,
+				minValue: 1,
+				maxValue: 15,
+				required: true
+			}
+			props = {...props, ...newProps};
+			return <GameNumericInput {...props} />
+		}
+	},
+	{
+		name: 'groupSize',
+		displayName: 'Group Size',
+		default: 1,
+		component: (newProps) => {
+			let props = {
+				initialValue: 1,
+				minValue: 1,
+				maxValue: 7,
+				required: true
+			}
+			props = {...props, ...newProps};
+			return <GameNumericInput {...props} />
+		}
+	},
+	{
+		name: 'timer',
+		displayName: 'Timer',
+		default: 0,
+		component: (newProps) => {
+			let props = {
+				initialValue: 0,
+				minValue: 0,
+				required: true
+			}
+			props = {...props, ...newProps};
+			return <GameNumericInput {...props} />
+		}
+	}
+];
