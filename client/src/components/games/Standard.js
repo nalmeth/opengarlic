@@ -295,7 +295,6 @@ export const settings = [
 			props = {...props, ...newProps};
 			return <GameNumericInput {...props} />
 		}
-
 	},
 	{
 		name: 'groupSize',
