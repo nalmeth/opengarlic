@@ -19,9 +19,10 @@ export const trim = (str, char) => {
  * @param {number} num
  * @returns {boolean}
  */
-export const isPositiveNumber = (num) => {
-	return Number.isInteger(Number(num)) && Number(num) > 0;
+export const isNumber = (num) => {
+	return Number.isInteger(Number(num));
 }
+
 
 /**
  * Check if value is true.
