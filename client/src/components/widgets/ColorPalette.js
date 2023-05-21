@@ -34,6 +34,8 @@ const ColorPalette = ({ setColor }) => {
 	const isNewColor = useRef(false);
 	// Tracking active color for changing color button display
 	const color = useRef("#000");
+	// Track index of palette color clicked
+	const pIdx = useRef(null);
 
 	/**
 	 * Fires when a palette button is clicked
@@ -48,6 +50,8 @@ const ColorPalette = ({ setColor }) => {
 
 		// Update flag for renderer to toggle save button for new colors
 		isNewColor.current = paletteIdx === 'new';
+		if(newColor.current === null) newColor.current = popColor;
+		pIdx.current = paletteIdx;
 
 		/**
 		 * If we are not holding control key and we didn't click on the
@@ -86,22 +90,31 @@ const ColorPalette = ({ setColor }) => {
 	}
 
 	/**
-	 * Triggered by save button click on color picker
+	 * Color save handler
 	 */
-	const addNewColorToPalette = () => {
-		if(!isNewColor.current) return;		// Ignore if no new color is set
+	const handleSaveColor = () => {
 
-		/**
-		 * Copy palette. Add the new color and update our palette state.
-		 * Update brush color palette state to use new color
-		 */
-		setColorPalette(prevPalette => [
-			...colorPalette,
-			newColor.current.hex
-		]);
+		if(isNewColor.current) {
+
+			// Add new color to palette
+			setColorPalette(prevPalette => [
+				...colorPalette,
+				newColor.current.hex
+			]);
+
+		} else {
+
+			// Change pre-existing color in palette
+			setColorPalette(prevPalette => {
+				return prevPalette.map((color, idx) => {
+					if(idx === pIdx.current) return newColor.current.hex;
+					return color;
+				});
+			});
+		}
+
+		// Close color picker and cleanup refs
 		setColor(newColor.current.hex);
-
-		// Close the picker and cleanup newColor refs
 		setOpen(prevOpen => false);
 		setPopAnchor(prevAnchor => null);
 		newColor.current = null;
@@ -117,10 +130,11 @@ const ColorPalette = ({ setColor }) => {
 			justifyContent="flex-start"
 			alignItems="flex-start"
 			spacing={.5}
+			columns={4}
 		>
 			{colorPalette.map((item, idx) => {
 				return (
-					<Grid xs="auto" key={idx}>
+					<Grid xs={1} key={idx}>
 						<Button
 							key={idx}
 							variant={'outlined'}
@@ -180,12 +194,9 @@ const ColorPalette = ({ setColor }) => {
 						hideHSV
 						hideRGB
 					/>
-					{isNewColor.current &&
 					<Box sx={{ display: 'flex', justifyContent: 'flex-end' }}>
-						<Button type="button" onClick={addNewColorToPalette}>Save</Button>
+						<Button type="button" onClick={handleSaveColor}>Save</Button>
 					</Box>
-					}
-
 				</Popper>
 			</ClickAwayListener>
 			}
