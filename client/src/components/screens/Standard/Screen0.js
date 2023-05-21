@@ -3,7 +3,7 @@ import Grid from "@mui/material/Unstable_Grid2/Grid2.js";
 import GameInput from "../../widgets/GameInput.js";
 import GameButton from "../../widgets/GameButton.js";
 import GameTimer from "../../widgets/GameTimer.js";
-import { useLocalStorage } from "../../../modules/Storage.js";
+import { removeStorageValue, useLocalStorage } from "../../../modules/Storage.js";
 
 const Screen0 = ({
 		isDone,
@@ -27,7 +27,7 @@ const Screen0 = ({
 	 */
 	useEffect(() => {
 		return () => {
-			setPlayerData(prevData => '');
+			removeStorageValue('playerData');
 			setRemaining(prevRem => settings.timer);
 		}
 		// eslint-disable-next-line
