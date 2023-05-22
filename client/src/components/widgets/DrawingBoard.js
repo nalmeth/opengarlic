@@ -473,11 +473,11 @@ const DrawingBoard = (props) => {
 											opacity={shape.opacity}
 											tension={props.tension}
 											lineCap={shape.lineCap}
-											// listening={shape.tool === DrawingTools.Eraser.name ? false : true}
-											globalCompositeOperation={'source-over'
-												// for now, things are easier and fine to just paint white instead of actual erasing
-												// shape.tool === 'eraser' ? 'destination-out' : 'source-over'
-											}
+											lineJoin="round"
+											listening={shape.tool === DrawingTools.Eraser.name ? false : true}
+											// for now, things are easier and fine to just paint white instead of actual erasing
+											// shape.tool === 'eraser' ? 'destination-out' : 'source-over'
+											globalCompositeOperation={'source-over'}
 											shadowForStrokeEnabled={false}
 											onClick={handleClick}
 										/>
