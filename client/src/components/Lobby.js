@@ -110,8 +110,6 @@ const Lobby = ({
 									if(owner !== playerName) return;
 									setSelectedMode(prevMode => mode.title);
 									setSelectedModeSettings(prevSettings => initSettings(mode));
-									setDialogSettingsTitle(prevTitle => mode.title);
-									setDialogSettings(prevSettings => mode.settings);
 								}}
 							>
 								<Typography variant={isSmall ? 'body2' : 'body1'}>{mode.title}</Typography>
@@ -135,18 +133,8 @@ const Lobby = ({
 											right: fabRight
 										}}
 										onClick={() => {
-											// console.log(`${selectedMode} ${mode.title}`)
-											if(selectedMode === mode.title) {
-												let updatedDiaglogSettings = [];
-												for(let setting of mode.settings) {
-													if(selectedModeSettings.hasOwnProperty(setting.name))
-														setting.default = selectedModeSettings[setting.name];
-													updatedDiaglogSettings.push(setting);
-												}
-												setDialogSettings(prevSettings => updatedDiaglogSettings);
-
-												// console.dir(updatedDiaglogSettings);
-											}
+											setDialogSettingsTitle(prevTitle => mode.title);
+											setDialogSettings(prevSettings => mode.settings);
 											setDialogOpen(true);
 										}}
 									>
@@ -163,7 +151,19 @@ const Lobby = ({
 						setDialogOpen={setDialogOpen}
 						dialogSettingsTitle={dialogSettingsTitle}
 						dialogSettings={dialogSettings}
-						onSave={settings => setSelectedModeSettings(prevSettings => settings)}
+						onSave={(title, settings) => {
+							// Update the defaults so they persist next time dialog is opened
+							Games.forEach(mode => {
+								if(mode.title === title) {
+									for(let setting of mode.settings) {
+										if(settings.hasOwnProperty(setting.name)) {
+											setting.default = settings[setting.name];
+										}
+									}
+								}
+							});
+							setSelectedModeSettings(prevSettings => settings)}
+						}
 					/>
 					{// Filler placeholders for game modes
 					Array(15).fill(1).map((_,i) => {
