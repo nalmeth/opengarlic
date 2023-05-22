@@ -30,6 +30,7 @@ const StdEndGame = ({
 			icons={false}
 			players={players}
 			buttonList={true}
+			selectedIndex={selectedPlayer}
 			onPlayerClick={(i) => setSelectedPlayer(i)}
 		/>
 		<Grid
