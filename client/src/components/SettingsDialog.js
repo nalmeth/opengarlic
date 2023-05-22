@@ -33,7 +33,7 @@ const SettingsDialog = ({
 
 	// Return settings to save, close dialog
 	const handleSave = () => {
-		onSave(updatedSettings.current)
+		onSave(dialogSettingsTitle, updatedSettings.current)
 		setDialogOpen(false);
 	}
 
