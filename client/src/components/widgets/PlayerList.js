@@ -20,9 +20,11 @@ const PlayerList = ({
 		playerName,
 		players,
 		breakpoints = {xs:4},
+		selectedIndex = null,
 		onPlayerKick = ()=>{},
 		onPlayerClick = ()=>{}
 	}) => {
+
 	const isSmall = useMediaQuery(theme => theme.breakpoints.down('md'));
 	const ListItemComponent = buttonList ?
 		ListItemButton : ListItem;
@@ -56,8 +58,14 @@ const PlayerList = ({
 					<React.Fragment key={`player.${i}`}>
 						<ListItemComponent
 							alignItems="flex-start"
-							sx={{ backgroundColor: '#212121' }}
+							sx={{
+								backgroundColor: '#212121',
+								'&.MuiListItemButton-root.Mui-selected': {
+									bgcolor: '#434343',
+								},
+							}}
 							onClick={() => onPlayerClick(i)}
+							selected={selectedIndex !== null && selectedIndex === i}
 						>
 							<ListItemAvatar>
 								<Avatar>
