@@ -60,8 +60,8 @@ const StdEndGame = ({
 							{i % 2 === 0 ?
 
 							/**
-								* This section displays the words
-								*/
+							 * This section displays the words
+							 */
 							<>
 							<Grid
 								container
@@ -70,44 +70,53 @@ const StdEndGame = ({
 									pt: 1, pb: 1,
 									pl: 2, pr: 2,
 									mr: 2,
-									borderRadius: 2,
 									justifyContent: 'flex-end',
 									alignItems: 'center'
 								}}
 							>
-
 								<Bubble side={BUBBLE_RIGHT}>
 									<Typography>{data?.value}</Typography>
 								</Bubble>
-
 								<ListItemAvatar>
 									<Avatar>
 										<ImageIcon />
 									</Avatar>
 								</ListItemAvatar>
-
 								<Typography variant="caption">{data?.name}</Typography>
-
 							</Grid>
 							</>
 
 							:
 
 							/**
-								* This section displays drawings
-								*/
-							<>
-							<ListItemAvatar>
-								<Avatar>
-									<ImageIcon />
-								</Avatar>
-							</ListItemAvatar>
-							<Bubble side={BUBBLE_LEFT}>
-								<Typography variant="caption">{data.name}</Typography>
-								<img src={data.value || 'images/blank.png'} width="100%" alt={key} />
-							</Bubble>
-
-							</>
+							 * This section displays drawings
+							 */
+							<Grid
+								container
+								overflow="hidden"
+								sx={{
+									pt: 1, pb: 1,
+									pl: 2, pr: 2,
+									mr: 2,
+									justifyContent: 'flex-start',
+									alignItems: 'top'
+								}}
+								columns={12}
+							>
+								<Grid xs={1}>
+									<Typography variant="caption">{data.name}</Typography>
+									<ListItemAvatar>
+										<Avatar>
+											<ImageIcon />
+										</Avatar>
+									</ListItemAvatar>
+								</Grid>
+								<Grid xs={11}>
+									<Bubble side={BUBBLE_LEFT}>
+										<img src={data.value || 'images/blank.png'} width="100%" alt={key} />
+									</Bubble>
+								</Grid>
+							</Grid>
 
 							}
 						</ListItem>

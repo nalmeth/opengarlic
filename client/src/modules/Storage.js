@@ -16,7 +16,6 @@ const getStorageValue = (key, defaultValue) => {
 		value = JSON.parse(saved);
 
 	} catch(err) {
-		// console.error(err);
 		value = false;
 	}
 
