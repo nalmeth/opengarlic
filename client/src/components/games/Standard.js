@@ -168,7 +168,7 @@ const Standard = ({
 	 * @param {string} playerName Player Name
 	 * @param {string} data Text Data from inputs
 	 */
-	const handleDone = (playerName, data) => {
+	const handleDone = (savePlayer, data) => {
 
 		let saveData = null;
 
@@ -187,7 +187,7 @@ const Standard = ({
 
 		// Fire the callback to the server to flag them as done
 		onDone({
-			[playerName]: [{
+			[savePlayer]: [{
 				name: playerName,
 				value: saveData
 			}]
