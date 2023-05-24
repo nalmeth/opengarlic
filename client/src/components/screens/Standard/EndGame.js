@@ -3,7 +3,8 @@ import Grid from '@mui/material/Unstable_Grid2';
 import {
 	Avatar, Divider, List, ListItem, ListItemAvatar, Typography
 } from "@mui/material";
-import ImageIcon from '@mui/icons-material/Image';
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faCircleUser as CircleUser } from "@fortawesome/free-solid-svg-icons";
 import Bubble, {
 	BUBBLE_LEFT,
 	BUBBLE_RIGHT
@@ -45,7 +46,7 @@ const StdEndGame = ({
 				overflow: "auto"
 			}}
 		>
-			<List sx={{ paddingTop: 0 }}>
+			<List sx={{ paddingTop: 0, backgroundColor: '#272727' }}>
 			{lobbyData[selectedPlayerName].map((data, i) => {
 
 				const key = i % 2 === 1 ? `img.${i}` : `words.${i}`;
@@ -80,7 +81,7 @@ const StdEndGame = ({
 								</Bubble>
 								<ListItemAvatar>
 									<Avatar>
-										<ImageIcon />
+										<FontAwesomeIcon icon={CircleUser} size="2xl" />
 									</Avatar>
 								</ListItemAvatar>
 								<Typography variant="caption">{data?.name}</Typography>
@@ -108,7 +109,7 @@ const StdEndGame = ({
 									<Typography variant="caption">{data.name}</Typography>
 									<ListItemAvatar>
 										<Avatar>
-											<ImageIcon />
+											<FontAwesomeIcon icon={CircleUser} size="2xl" />
 										</Avatar>
 									</ListItemAvatar>
 								</Grid>
