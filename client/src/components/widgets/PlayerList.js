@@ -35,6 +35,7 @@ const PlayerList = ({
 			xs={breakpoints.xs}
 			sm={breakpoints.sm}
 			md={breakpoints.md}
+			lg={breakpoints.lg}
 			sx={{
 				border: '1px solid #353535',
 				borderRadius: '10px 0 0 10px',

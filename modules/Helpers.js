@@ -1,3 +1,12 @@
+import fs from 'node:fs/promises';
+
+/**
+ * Check if a file exists
+ * @param {string} path
+ * @returns
+ */
+export const fileExists = async path => !!(await fs.stat(path).catch(e => false));
+
 /**
  * Return whether the string is empty
  * @param {string}

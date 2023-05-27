@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import Grid from '@mui/material/Unstable_Grid2';
 import {
 	Avatar, Divider, List, ListItem, ListItemAvatar, Typography
@@ -10,6 +10,8 @@ import Bubble, {
 	BUBBLE_RIGHT
 } from "../../widgets/Bubble.js";
 import PlayerList from "../../widgets/PlayerList.js";
+import GameButton from "../../widgets/GameButton.js";
+import { wordWrap } from "../../../modules/Helpers.js";
 
 /**
  * End Screen for Standard game mode
@@ -18,12 +20,44 @@ import PlayerList from "../../widgets/PlayerList.js";
  */
 const StdEndGame = ({
 		players,
-		lobbyData
+		lobbyData,
+		createGIF,
+		socket
 	}) => {
 
 	const [selectedPlayer, setSelectedPlayer] = useState(0);
+	const [gifButtonDisabled, setGifButtonDisabled] = useState(false);
 
 	const selectedPlayerName = players[selectedPlayer].name;
+
+	const events = {
+		GIFCreated: (data, filename) => {
+			console.log('GIF Created');
+			setGifButtonDisabled(false);
+			let link = document.createElement('a');
+			link.href = data;
+			link.download = filename;
+			link.style = 'display:none';
+			document.body.appendChild(link);
+			link.click();
+			document.body.removeChild(link);
+		}
+	};
+
+	useEffect(() => {
+		// console.log('Attach Standard Events');
+		for(const name in events) {
+			socket.on(name, events[name]);
+		}
+
+		return () => {
+			// console.log('Detach Standard Events');
+			for(const name in events) {
+				socket.off(name, events[name]);
+			}
+		}
+		// eslint-disable-next-line
+	}, []);
 
 	return (
 		<>
@@ -33,20 +67,23 @@ const StdEndGame = ({
 			buttonList={true}
 			selectedIndex={selectedPlayer}
 			onPlayerClick={(i) => setSelectedPlayer(i)}
+			breakpoints={{xs:4,lg:3}}
 		/>
 		<Grid
 			container
 			key="dataDisplay"
 			xs={8}
+			lg={9}
 			sx={{
 				border: '1px solid #353535',
 				borderRadius: '0px 0px 10px 0px',
 				minHeight: 600,
 				maxHeight: 600,
-				overflow: "auto"
+				overflow: "auto",
+				backgroundColor: '#272727'
 			}}
 		>
-			<List sx={{ paddingTop: 0, backgroundColor: '#272727' }}>
+			<List sx={{ paddingTop: 0 }}>
 			{lobbyData[selectedPlayerName].map((data, i) => {
 
 				const key = i % 2 === 1 ? `img.${i}` : `words.${i}`;
@@ -106,7 +143,7 @@ const StdEndGame = ({
 								columns={12}
 							>
 								<Grid xs={1}>
-									<Typography variant="caption">{data.name}</Typography>
+									<Typography variant="caption">{wordWrap(data.name, 8)}</Typography>
 									<ListItemAvatar>
 										<Avatar>
 											<FontAwesomeIcon icon={CircleUser} size="2xl" />
@@ -128,6 +165,19 @@ const StdEndGame = ({
 			})}
 			</List>
 
+			<Grid container sx={{ flexGrow: 1 }} mb={3}>
+				<Grid xs xsOffset={4} lgOffset={5}>
+					<GameButton
+						onClick={() => {
+							setGifButtonDisabled(true);
+							createGIF(selectedPlayerName);
+						}}
+						disabled={gifButtonDisabled}
+					>
+						Download GIF
+					</GameButton>
+				</Grid>
+			</Grid>
 		</Grid>
 		</>
 	)

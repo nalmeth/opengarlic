@@ -4,6 +4,8 @@ import * as ImageFrame from '../ImageFrame.js';
 import * as Lobby from '../Lobby.js';
 import Logger from "../Logger.js";
 import { customAlphabet } from "nanoid";
+import { spawn } from "node:child_process";
+import { fileExists } from "../Helpers.js";
 
 
 // const testData = JSON.parse(
@@ -50,53 +52,52 @@ const stageSize = Object.freeze({
 });
 
 /**
- * Generate a gif of a Standard mode lobby
+ * Generate a frames for a gif of a Standard mode lobby
  * @param {string} lobbyData
  * @param {string} playerName
+ * @param {string} outputDir
+ * @returns {array} Target path and filename for the gif
  */
-export const generateGIF = async (lobbyCode, playerName) => {
+export const generateFrames = async (lobbyCode, playerName, outputDir) => {
 
 	const lobbyData = await Lobby.getLobbyData(lobbyCode);
 
 	if(!lobbyData) {
 		Logger.info(`Error generating GIF for lobby: ${lobbyCode}`);
-		return;
+		throw new Error(`Invalid lobby code: ${lobbyCode}`);
 	}
 
 	for(const player in lobbyData) {
-		if(player === playerName) {
+		if(player !== playerName) { continue; }
 
-			let frameData = {};
-			for(let i = 0; i < lobbyData[player].length; i++) {
+		let frameData = {};
+		for(let i = 0; i < lobbyData[player].length; i++) {
 
-				frameData = lobbyData[player][i];
-				if(i % 2 === 0) {
+			frameData = lobbyData[player][i];
+			if(i % 2 === 0) {
 
-					await TextFrame.createFrame({
-						stageSize,
-						slices,
-						colors,
-						frameData,
-						savePath: `G:\\${lobbyCode}:frame:${i}.png`
-					});
+				let textFrameName = `${playerName}.frame${String(i).padStart(4,0)}.png`
+				await TextFrame.createFrame({
+					stageSize,
+					slices,
+					colors,
+					frameData,
+					savePath: `${outputDir}/${textFrameName}`
+				});
 
-				} else {
+			} else {
 
-					await ImageFrame.createFrame({
-						stageSize,
-						slices,
-						colors,
-						frameData,
-						savePath: `G:\\${lobbyCode}:frame:${i}.png`,
-						tmpPath: `G:\\${lobbyCode}:tmpFrame:${nanoid()}.png`
-					});
+				let imgFrameName = `${playerName}.frame${String(i).padStart(4,0)}.png`
+				await ImageFrame.createFrame({
+					stageSize,
+					slices,
+					colors,
+					frameData,
+					savePath: `${outputDir}/${imgFrameName}`,
+					tmpPath: `${outputDir}/tmpFrame.${nanoid()}.png`
+				});
 
-				}
 			}
-
-			break;
 		}
 	}
 }
-
-generateGIF(testData, "chrome");

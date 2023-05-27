@@ -48,8 +48,6 @@ export const createFrame = async({
 		layer.add(img);
 	});
 
-	await fs.rm(tmpPath, { force: true });
-
 	Frame.createUserIcon({
 		position: {
 			x: 888,
@@ -93,4 +91,5 @@ export const createFrame = async({
 	const newImgDataBuff = Buffer.from(newImgDataUrl, "base64");
 
 	await fs.writeFile(savePath, newImgDataBuff);
+	await fs.rm(tmpPath, { force: true });
 }
