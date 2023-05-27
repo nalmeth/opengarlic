@@ -74,11 +74,15 @@ const CreateGIF = async (io, socket, data) => {
 		/**
 		 * Create the actual gif from the frames
 		 */
-		const gifArgs = [
+		let gifArgs = [
 			`--fps`, `1`,
-			`-o`, `${GIFNAME}`,
-			`${GIFDIR}/${data.playerName}*.png`
+			`-o`, `${GIFDIR}/${GIFNAME}`,
 		];
+
+		// Get list of frames
+		let frames = await fs.readdir(`${GIFDIR}`);
+		frames = frames.filter(frame => frame.startsWith(data.playerName));
+		gifArgs = gifArgs.concat(frames);
 
 		console.log('Generate GIF');
 
@@ -86,9 +90,9 @@ const CreateGIF = async (io, socket, data) => {
 			cwd: GIFDIR, timeout: 10000
 		});
 
-		// gifski.stdout.on('data', data => console.log(data));
+		gifski.stdout.on('data', data => console.log(`SKI DATA ${data}`));
 
-		gifski.stderr.on('data', data => console.error(data));
+		gifski.stderr.on('data', data => console.error(`SKI ERROR: ${data}`));
 
 		gifski.on('close', async code => {
 			const gifFile = (await fs.readFile(`${GIFDIR}/${GIFNAME}`, 'base64')).toString('image/gif');

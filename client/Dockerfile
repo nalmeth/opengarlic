@@ -3,9 +3,6 @@
 ############
 FROM node:current-alpine as builder
 
-# Add curl for later RUN command
-RUN apk update && apk add curl
-
 # Setup working directory and add node modules bin to PATH
 WORKDIR /app
 ENV PATH /app/node_modules/.bin:$PATH
@@ -13,7 +10,6 @@ ENV PATH /app/node_modules/.bin:$PATH
 # Copy in package json files and install dependencies
 COPY package*.json /app
 RUN npm ci
-# --loglevel verbose
 
 # Copy in the rest of the application
 COPY . /app
