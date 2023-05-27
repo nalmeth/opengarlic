@@ -1,6 +1,6 @@
 import * as Lobby from '../Lobby.js';
 import Logger from "../Logger.js";
-import GIFMakers from '../GIFMakers.js';
+import FrameMakers from '../FrameMakers.js';
 import fs from 'node:fs/promises';
 import { fileExists } from "../Helpers.js";
 import { spawn } from "node:child_process";
@@ -24,7 +24,7 @@ const CreateGIF = async (io, socket, data) => {
 		});
 	}
 
-	const maker = GIFMakers[lobby.mode];
+	const maker = FrameMakers[lobby.mode];
 
 	if(!maker) {
 		Logger.info(`Invalid GIF Maker ${lobby.mode}`);
@@ -88,7 +88,7 @@ const CreateGIF = async (io, socket, data) => {
 
 		// gifski.stdout.on('data', data => console.log(data));
 
-		gifski.stderr.on('data', data => console.error(`ski: ${data}`));
+		gifski.stderr.on('data', data => console.error(data));
 
 		gifski.on('close', async code => {
 			const gifFile = (await fs.readFile(`${GIFDIR}/${GIFNAME}`, 'base64')).toString('image/gif');
