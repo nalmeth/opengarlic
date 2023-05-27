@@ -15,6 +15,25 @@ export const trim = (str, char) => {
 }
 
 /**
+ * Wrap text at a line length
+ * @param {string} text
+ * @param {number} maxLength
+ * @returns
+ */
+export const wordWrap = (text, maxLength) => {
+	let wrappedText = text;
+	if(text.length > maxLength) {
+		let segments = [];
+		let splitText = text.split('');
+		while(splitText.length > 0) {
+			segments.push(splitText.splice(0, maxLength).join(''));
+		}
+		wrappedText = segments.join('\n');
+	}
+	return wrappedText;
+}
+
+/**
  * Return if the number is a valid positive number
  * @param {number} num
  * @returns {boolean}

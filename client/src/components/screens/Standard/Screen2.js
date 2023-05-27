@@ -83,6 +83,7 @@ const Screen2 = ({
 				label="What is this drawing"
 				onUpdate={data => setPlayerData(data)}
 				value={playerData}
+				inputProps={{ maxLength: 60, tabIndex: 0 }}
 			/>
 			<GameButton
 				disabled={isDone}

@@ -2,6 +2,7 @@ import * as Lobby from '../Lobby.js';
 import Logger from '../Logger.js';
 import { ConnectionStatus } from "../ConnectionStatus.js";
 import { PlayerStatus } from "../PlayerStatus.js";
+import { LobbyStatus } from "../LobbyStatus.js";
 
 /**
  * Player Disconnect Event
@@ -86,7 +87,7 @@ const DisconnectPlayer = async (io, socket, data) => {
 		};
 
 		const success = await Lobby.setPlayer(socket.data.lobbyCode, disconnectedPlayer.name, newPlayer);
-		// If not lobby owner, give them a few second to rejoin
+		// If not lobby owner, give them a few seconds to rejoin
 		// or else notify lobby
 		if(!disconnectedPlayer.owner) {
 			setTimeout(async() => {
@@ -108,6 +109,11 @@ const DisconnectPlayer = async (io, socket, data) => {
 				if(!reconnected) {
 					// remove from player list
 					const newLobby = await Lobby.setPlayers(lobbyCode, connectedPlayers);
+
+					// No need to notify if lobby is ended
+					if(newLobby.status === LobbyStatus.ENDED) {
+						return;
+					}
 
 					// Check if all players are done (in case we're midgame)
 					let allDone = true;

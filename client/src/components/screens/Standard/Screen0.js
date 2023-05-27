@@ -67,6 +67,7 @@ const Screen0 = ({
 				disabled={isDone}
 				onUpdate={(data) => setPlayerData(data)}
 				value={playerData}
+				inputProps={{ maxLength: 60, tabIndex: 0 }}
 			/>
 			<GameButton disabled={isDone} onClick={handleDone}>Done</GameButton>
 			<GameTimer

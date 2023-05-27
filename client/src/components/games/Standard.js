@@ -266,7 +266,20 @@ const Standard = ({
 					container
 					direction="row"
 				>
-					<StdEndGame players={players} lobbyData={lobbyData} />
+					<StdEndGame
+						players={players}
+						lobbyData={lobbyData}
+						socket={socket}
+						createGIF={playerName => {
+							socket.emit('message', {
+								type: 'CreateGIF',
+								data: {
+									lobbyCode: code,
+									playerName
+								}
+							})
+						}}
+					/>
 				</Grid>
 			</Grid>
 	)

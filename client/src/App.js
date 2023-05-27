@@ -117,9 +117,9 @@ const App = ({ socket }) => {
 		},
 		error: (err) => {
 			// console.log('Error from server:');
-			setLobbyCode(prevCode => '');
-			setGameLobby(prevLobby => emptyLobby);
-			setLobbyData(prevData => {});
+			// setLobbyCode(prevCode => '');
+			// setGameLobby(prevLobby => emptyLobby);
+			// setLobbyData(prevData => {});
 			console.error(err);
 		}
 	});

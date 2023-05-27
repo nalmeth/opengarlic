@@ -8,9 +8,9 @@ import Grid from "@mui/material/Unstable_Grid2/Grid2.js"
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import {
 	faCrown as CrownIcon,
-	faXmark as XMarkIcon
+	faXmark as XMarkIcon,
+	faCircleUser as CircleUser
 } from "@fortawesome/free-solid-svg-icons";
-import ImageIcon from '@mui/icons-material/Image';
 
 const PlayerList = ({
 		icons = true,
@@ -35,6 +35,7 @@ const PlayerList = ({
 			xs={breakpoints.xs}
 			sm={breakpoints.sm}
 			md={breakpoints.md}
+			lg={breakpoints.lg}
 			sx={{
 				border: '1px solid #353535',
 				borderRadius: '10px 0 0 10px',
@@ -69,7 +70,7 @@ const PlayerList = ({
 						>
 							<ListItemAvatar>
 								<Avatar>
-									<ImageIcon />
+									<FontAwesomeIcon icon={CircleUser} size="2xl" />
 								</Avatar>
 							</ListItemAvatar>
 
