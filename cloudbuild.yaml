@@ -1,0 +1,3 @@
+steps:
+- name: 'docker/compose:1.26.2'
+  args: ['up', '-d']
