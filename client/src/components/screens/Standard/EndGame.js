@@ -32,7 +32,6 @@ const StdEndGame = ({
 
 	const events = {
 		GIFCreated: (data, filename) => {
-			console.log('GIF Created');
 			setGifButtonDisabled(false);
 			let link = document.createElement('a');
 			link.href = data;

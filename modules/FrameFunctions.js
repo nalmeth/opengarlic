@@ -1,5 +1,6 @@
 import Konva from 'konva';
 import { Canvas } from "canvas";
+import { rand } from "./Helpers.js";
 
 /**
  * Generate background shapes randomly in a given slice
@@ -161,14 +162,6 @@ export const getTextWidth = (text, font) => {
 	ctx.font = font;
 	return ctx.measureText(text).width;
 }
-
-/**
- * Get a random number between min and max
- * @param {number} min
- * @param {number} max
- * @returns {number}
- */
-export const rand = (min, max) => Math.floor(Math.random() * (max - min + 1) + min);
 
 /**
  * Create the box for a username

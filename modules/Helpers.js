@@ -14,6 +14,14 @@ export const fileExists = async path => !!(await fs.stat(path).catch(e => false)
 export const isEmpty = (str) => !str || str.length === 0;
 
 /**
+ * Get a random number between min and max
+ * @param {number} min
+ * @param {number} max
+ * @returns {number}
+ */
+export const rand = (min, max) => Math.floor(Math.random() * (max - min + 1) + min);
+
+/**
  * Check if value is true.
  * (For strings 'true' is true, 'false' is false)
  * @param {mixed} input
