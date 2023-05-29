@@ -1,16 +1,8 @@
-import fs from 'node:fs/promises';
-import * as TextFrame from '../TextFrame.js';
-import * as ImageFrame from '../ImageFrame.js';
+import * as TextFrame from './TextFrame.js';
+import * as ImageFrame from './ImageFrame.js';
 import * as Lobby from '../Lobby.js';
 import Logger from "../Logger.js";
 import { customAlphabet } from "nanoid";
-import { spawn } from "node:child_process";
-import { fileExists } from "../Helpers.js";
-
-
-// const testData = JSON.parse(
-// 	await fs.readFile('./modules/data.json')
-// );
 
 const alphabet = '0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz';
 const nanoid = customAlphabet(alphabet, 6);

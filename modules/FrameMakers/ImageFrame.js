@@ -1,6 +1,6 @@
 import Konva from 'konva';
 import fs from 'node:fs/promises';
-import * as Frame from './FrameFunctions.js';
+import * as Frame from '../FrameFunctions.js';
 
 /**
  * Create a image frame of image data

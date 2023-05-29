@@ -1,5 +1,6 @@
 import * as Lobby from '../Lobby.js';
 import Logger from '../Logger.js';
+
 /**
  * Kick Lobby Event
  * @param {object} io Server Object
@@ -24,9 +25,16 @@ const KickLobby = async (io, socket, data) => {
 	}
 
 	// Remove player from the lobby
-	const lobby = await Lobby.leave(data.playerName, data.lobbyCode, false);
+	const lobby = await Lobby.leave(data.playerName, data.lobbyCode);
+	if(lobby === null) {
+		socket.emit('error', {
+			type: 'KickLobby',
+			message: `Unable to kick player: ${data.playerName}`
+		});
+		return;
+	}
+
 	// Emit a lobby update to the remaining players
-	Logger.info('kicklobby send update')
 	io.in(data.lobbyCode).emit('LobbyUpdated', lobby);
 	// Emit an event to the kicked player, notifying them of being kicked
 	io.to(playerSocket?.id).emit('KickedFromLobby');

@@ -1,6 +1,6 @@
 import Konva from 'konva';
 import fs from 'node:fs/promises';
-import * as Frame from './FrameFunctions.js'
+import * as Frame from '../FrameFunctions.js'
 
 /**
  * Create an image frame of a text prompt
@@ -67,7 +67,6 @@ export const createFrame = async ({
 	});
 
 	// Get username
-	// const username = testData[Object.keys(testData)[0]][0].name;
 	const username = frameData.name;
 
 	const textWidth = Frame.getTextWidth(username, '30px Roboto');
