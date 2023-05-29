@@ -1,5 +1,6 @@
 import * as Lobby from '../Lobby.js';
 import Logger from '../Logger.js';
+
 /**
  * Start Game Event
  * @param {object} io Server Object

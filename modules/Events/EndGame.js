@@ -1,6 +1,12 @@
 import * as Lobby from '../Lobby.js';
 import Logger from "../Logger.js";
 
+/**
+ * End Game Event
+ * @param {object} io Server Object
+ * @param {object} socket Socket Object
+ * @param {object} data Event Object
+ */
 const EndGame = async (io, socket, data) => {
 	Logger.info(`ENDGAME ${data.lobbyCode}`);
 

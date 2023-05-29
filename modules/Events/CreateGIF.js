@@ -6,11 +6,10 @@ import { fileExists } from "../Helpers.js";
 import { spawn } from "node:child_process";
 
 /**
- * Event to create a GIF
- * @param {object} io
- * @param {object} socket
- * @param {object} data
- * @returns
+ * Create GIF Event
+ * @param {object} io Server Object
+ * @param {object} socket Socket Object
+ * @param {object} data Event Object
  */
 const CreateGIF = async (io, socket, data) => {
 	Logger.info(`Making GIF ${data.lobbyCode}`);

@@ -1,5 +1,6 @@
 import * as Lobby from '../Lobby.js';
 import Logger from '../Logger.js';
+
 /**
  * Kick Lobby Event
  * @param {object} io Server Object
@@ -24,7 +25,7 @@ const KickLobby = async (io, socket, data) => {
 	}
 
 	// Remove player from the lobby
-	const lobby = await Lobby.leave(data.playerName, data.lobbyCode, false);
+	const lobby = await Lobby.leave(data.playerName, data.lobbyCode);
 	// Emit a lobby update to the remaining players
 	Logger.info('kicklobby send update')
 	io.in(data.lobbyCode).emit('LobbyUpdated', lobby);

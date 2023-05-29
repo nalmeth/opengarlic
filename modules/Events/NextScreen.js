@@ -1,6 +1,12 @@
 import * as Lobby from '../Lobby.js';
 import Logger from '../Logger.js';
 
+/**
+ * Next Screen Event
+ * @param {object} io Server Object
+ * @param {object} socket Socket Object
+ * @param {object} data Event Object
+ */
 const NextScreen = async(io, socket, data) => {
 	Logger.info(`NEXTSCR ${data.lobbyCode}`);
 

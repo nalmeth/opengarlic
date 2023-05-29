@@ -74,6 +74,9 @@ const App = ({ socket }) => {
 			setLobbyCode(prevCode => '');
 			setLobbyData(prevData => {});
 		},
+		BanLobby: (lobby) => {
+			setGameLobby(prevLobby => lobby);
+		},
 		LobbyJoined: (lobby) => {
 			// console.log('LobbyJoined', lobby);
 			setGameLobby(prevLobby => lobby);
@@ -248,6 +251,15 @@ const App = ({ socket }) => {
 										settings
 									}
 								});
+							}}
+							onPlayerBan={(code, playerName) => {
+								socket.emit('message', {
+									type: 'BanLobby',
+									data: {
+										playerName,
+										lobbyCode: code
+									}
+								})
 							}}
 							onPlayerKick={(code, playerName) => {
 								socket.emit('message', {

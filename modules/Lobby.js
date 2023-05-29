@@ -77,7 +77,8 @@ export const create = async (owner, appScreen) => {
 					status: PlayerStatus.ACTIVE,
 					connected: ConnectionStatus.CONNECTED
 				}
-			]
+			],
+			bans: []
 		};
 
 		// Store the lobby in redis
@@ -498,6 +499,13 @@ export const getPlayer = async (playerName, lobbyCode) => {
 	return player;
 }
 
+/**
+ * Update a single player in the lobby
+ * @param {string} lobbyCode
+ * @param {string} playerName
+ * @param {object} playerObject
+ * @returns {boolean} Succes of operation
+ */
 export const setPlayer = async (lobbyCode, playerName, playerObject) => {
 	try {
 
@@ -513,8 +521,16 @@ export const setPlayer = async (lobbyCode, playerName, playerObject) => {
 		Logger.error(err);
 		return false;
 	}
+
+	return true;
 }
 
+/**
+ * Set all the lobby players
+ * @param {string} lobbyCode
+ * @param {array} newPlayers
+ * @returns {object}
+ */
 export const setPlayers = async (lobbyCode, newPlayers) => {
 
 	let lobby = await get(lobbyCode);
@@ -569,7 +585,7 @@ export const getLobbyData = async (lobbyCode) => {
 }
 
 /**
- *
+ * Set lobby status to game end
  * @param {string} lobbyCode
  * @returns {object|null}
  */
@@ -584,3 +600,32 @@ export const endGame = async (lobbyCode) => {
 	}
 	return lobby;
 }
+
+/**
+ * Ban a player from the lobby
+ * @param {string} lobbyCode
+ * @param {string} playerAddress
+ */
+export const banPlayer = async (lobbyCode, playerAddress) => {
+	let lobby = null;
+
+	try {
+
+		const bans = await redisClient.json.get(`lobby:${lobbyCode}`, { path: [`.bans`] });
+
+		let newBans = [...bans];
+		if(!bans.includes(playerAddress)) {
+			newBans.push(playerAddress);
+		}
+
+		await redisClient.json.set(`lobby:${lobbyCode}`, '.bans', newBans);
+		lobby = get(lobbyCode);
+
+	} catch(err) {
+		Logger.error(err);
+		return null;
+	}
+
+	return lobby;
+}
+

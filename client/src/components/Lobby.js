@@ -32,6 +32,7 @@ const Lobby = ({
 		playerName,
 		onModeSelect,
 		onPlayerKick,
+		onPlayerBan,
 	}) => {
 
 	// Set default mode into state
@@ -72,6 +73,7 @@ const Lobby = ({
 			players={displayPlayers}
 			playerName={playerName}
 			onPlayerKick={onPlayerKick}
+			onPlayerBan={onPlayerBan}
 			breakpoints={{xs:8,sm:6,md:5}}
 		/>
 		<Grid

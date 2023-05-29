@@ -9,7 +9,8 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import {
 	faCrown as CrownIcon,
 	faXmark as XMarkIcon,
-	faCircleUser as CircleUser
+	faCircleUser as CircleUser,
+	faBan as BanIcon
 } from "@fortawesome/free-solid-svg-icons";
 
 const PlayerList = ({
@@ -22,6 +23,7 @@ const PlayerList = ({
 		breakpoints = {xs:4},
 		selectedIndex = null,
 		onPlayerKick = ()=>{},
+		onPlayerBan = ()=>{},
 		onPlayerClick = ()=>{}
 	}) => {
 
@@ -99,6 +101,24 @@ const PlayerList = ({
 										}}
 									>
 										<FontAwesomeIcon icon={CrownIcon} />
+									</IconButton>
+								</Tooltip>
+							}
+							{icons && (!player.owner && owner === playerName) &&
+								<Tooltip title="Ban Player">
+									<IconButton
+										aria-label="ban player"
+										sx={{
+											color: '#ad3739',
+											"&.MuiButtonBase-root:hover": {
+												bgcolor: "transparent"
+											},
+											mr: 1,
+											mt: .5
+										}}
+										onClick={() => onPlayerBan(code, player.name)}
+									>
+										<FontAwesomeIcon icon={BanIcon} size="xs" />
 									</IconButton>
 								</Tooltip>
 							}

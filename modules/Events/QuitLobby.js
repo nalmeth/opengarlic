@@ -1,6 +1,12 @@
 import LeavePlayer from "../EventHelper.js";
 import Logger from "../Logger.js";
 
+/**
+ * Quit Lobby Event
+ * @param {object} io Server Object
+ * @param {object} socket Socket Object
+ * @param {object} data Event Object
+ */
 const QuitLobby = async (io, socket, data) => {
 	Logger.info(`Quit ${data.playerName} ${data.lobbyCode}`);
 
