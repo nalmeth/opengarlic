@@ -10,42 +10,45 @@ import * as Lobby from '../Lobby.js';
 const BanLobby = async (io, socket, data) => {
 	Logger.info(`Banning ${data.playerName}`);
 
-	const playerSockets = await io.in(data.lobbyCode).fetchSockets();
+	try {
 
-	let playerAddress = '';
-	let sockedId = '';
-	for(const pSocket of playerSockets) {
-		if(pSocket.data.playerName === data.playerName) {
-			sockedId = pSocket.id;
-			playerAddress = pSocket.handshake.address;
-			break;
+		const playerSockets = await io.in(data.lobbyCode).fetchSockets();
+
+		let playerAddress = '';
+		let sockedId = '';
+		for(const pSocket of playerSockets) {
+			if(pSocket.data.playerName === data.playerName) {
+				sockedId = pSocket.id;
+				playerAddress = pSocket.handshake.address;
+				break;
+			}
 		}
-	}
 
-	// Remove the player from the room
-	io.in(sockedId).socketsLeave(data.lobbyCode);
+		// Remove the player from the room
+		io.in(sockedId).socketsLeave(data.lobbyCode);
+		io.to(sockedId).emit('BannedFromLobby');
 
-	// Remove player from the lobby
-	let lobby = await Lobby.leave(data.playerName, data.lobbyCode);
-	if(lobby === null) {
+		// Remove player from the lobby
+		let lobby = await Lobby.leave(data.playerName, data.lobbyCode);
+		if(lobby === null) {
+			throw new Erro(`Unable to kick player: ${data.playerName}`);
+		}
+
+		// Ban the player
+		lobby = await Lobby.banPlayer(data.lobbyCode, playerAddress);
+		if(lobby === null) {
+			throw new Error(`Unable to ban player: ${data.playerName}`);
+		}
+
+		io.in(data.lobbyCode).emit('LobbyUpdated', lobby);
+
+	} catch(err) {
+
 		socket.emit('error', {
 			type: 'BanLobby',
-			message: `Unable to remove player: ${data.playerName}`
+			message: err.message
 		});
-		return;
 	}
-
-	// Ban the player
-	lobby = await Lobby.banPlayer(data.lobbyCode, playerAddress);
-	if(lobby === null) {
-		socket.emit('error', {
-			type: 'BanLobby',
-			message: `Unable to ban player: ${data.playerName}`
-		});
-		return;
-	}
-
-	io.in(data.lobbyCode).emit('BanLobby', lobby);
 }
 
 export default BanLobby;

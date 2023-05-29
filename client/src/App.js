@@ -74,8 +74,10 @@ const App = ({ socket }) => {
 			setLobbyCode(prevCode => '');
 			setLobbyData(prevData => {});
 		},
-		BanLobby: (lobby) => {
-			setGameLobby(prevLobby => lobby);
+		BannedFromLobby: (lobby) => {
+			setGameLobby(prevLobby => emptyLobby);
+			setLobbyCode(prevCode => '');
+			setLobbyData(prevData => '');
 		},
 		LobbyJoined: (lobby) => {
 			// console.log('LobbyJoined', lobby);

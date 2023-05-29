@@ -629,3 +629,20 @@ export const banPlayer = async (lobbyCode, playerAddress) => {
 	return lobby;
 }
 
+/**
+ * Returns the addresses banned from the lobby
+ * @param {string} lobbyCode
+ * @returns
+ */
+export const getBans = async (lobbyCode) => {
+	try {
+
+		const bans = await redisClient.json.get(`lobby:${lobbyCode}`, { path: [`.bans`] });
+
+		return bans;
+
+	} catch(err) {
+		Logger.error(err);
+		return [];
+	}
+}

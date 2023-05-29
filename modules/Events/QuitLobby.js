@@ -15,6 +15,7 @@ const QuitLobby = async (io, socket, data) => {
 		await LeavePlayer(io, socket);
 
 	} catch(err) {
+
 		socket.emit('error', {
 			type: 'QuitLobby',
 			message: err.message

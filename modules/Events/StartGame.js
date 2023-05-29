@@ -11,22 +11,28 @@ const StartGame = async (io, socket, data) => {
 
 	Logger.info(`START ${data.lobbyCode} ${data.mode}`);
 
-	const lobby = await Lobby.start(
-		data.lobbyCode,
-		data.mode,
-		data.appScreen,
-		data.settings
-	);
+	try {
 
-	if(lobby === null) {
-		socket.emit('error',{
+		const lobby = await Lobby.start(
+			data.lobbyCode,
+			data.mode,
+			data.appScreen,
+			data.settings
+		);
+
+		if(lobby === null) {
+			throw new Error('Error starting Lobby');
+		}
+
+		io.in(data.lobbyCode).emit('LobbyUpdated', lobby);
+
+	} catch(err) {
+
+		socket.emit('error', {
 			type: 'StartGame',
-			message: 'Error starting Lobby'
+			message: err.message
 		});
-		return;
 	}
-
-	io.in(data.lobbyCode).emit('LobbyUpdated', lobby);
 }
 
 export default StartGame;
