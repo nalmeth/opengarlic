@@ -1,4 +1,4 @@
-﻿version: '3.9'
+﻿version: '3.8'
 services:
 
   redis:
@@ -37,19 +37,6 @@ services:
     ports:
       - "80:80"
       - "443:443"
-    depends_on:
-      - backend
-    networks:
-      - ognet
-
-  adminui:
-    image: opengartic/socketio.adminui
-    restart: unless-stopped
-    build:
-      context: ./socketio.adminui
-      dockerfile: Dockerfile
-    ports:
-      - "85:85"
     depends_on:
       - backend
     networks:
