@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import Grid from '@mui/material/Unstable_Grid2';
 import { Divider, Stack, TextField } from "@mui/material";
 import GameButton from "./widgets/GameButton.js";
+import GameInput from "./widgets/GameInput.js";
 
 /**
  * Create/Join Lobby Component(Page)
@@ -46,14 +47,16 @@ const Login = ({
 			<Grid xs={6} md={4}>
 
 				<Stack spacing={2}>
-					<TextField
+					<GameInput
 						label="Player Name"
-						value={playerName}
-						required
+						size="medium"
 						autoFocus={true}
+						value={playerName}
+						error={nameError}
+						helperText={nameError && "Name must be at least 3 characters"}
 						inputProps={{ maxLength: 20, tabIndex: 0 }}
-						onChange={event => {
-							const playerName = event.target.value.trim();
+						onUpdate={value => {
+							const playerName = value.trim();
 
 							setCreateDisabled(
 								!isValidPlayerName(playerName) || isCode(lobbyCode)
@@ -73,8 +76,6 @@ const Login = ({
 
 							setNameError(playerName.length > 0 && !isValidPlayerName(playerName));
 						}}
-						error={nameError}
-						helperText={nameError && "Name must be at least 3 characters"}
 					/>
 
 					<Divider light>THEN</Divider>
@@ -89,12 +90,15 @@ const Login = ({
 
 					<Divider light>OR</Divider>
 
-					<TextField
+					<GameInput
 						label="Lobby Code"
+						size="medium"
 						value={lobbyCode}
+						error={codeError}
+						helperText={codeError && "Code must be 6 characters"}
 						inputProps={{ maxLength: 6, tabIndex: 0 }}
-						onChange={event => {
-							const code = event.target.value.trim();
+						onUpdate={value => {
+							const code = value.trim();
 
 							setJoinDisabled(
 								!isValidPlayerName(playerName) || !isValidCode(code)
@@ -114,8 +118,6 @@ const Login = ({
 							// Flag error for too short code (when not empty)
 							setCodeError(isCode(code) && !isValidCode(code));
 						}}
-						error={codeError}
-						helperText={codeError && "Code must be 6 characters"}
 					/>
 					<GameButton
 						disabled={joinDisabled}
