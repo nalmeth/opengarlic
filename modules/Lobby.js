@@ -77,8 +77,7 @@ export const create = async (owner, appScreen) => {
 					status: PlayerStatus.ACTIVE,
 					connected: ConnectionStatus.CONNECTED
 				}
-			],
-			bans: []
+			]
 		};
 
 		// Store the lobby in redis
@@ -86,8 +85,11 @@ export const create = async (owner, appScreen) => {
 		await redisClient.expire(lobbyKey, TIMEOUT);
 
 		// Create a general use data store for the lobby
-		await redisClient.json.set(`lobby:data:${lobbyCode}`, '$', {});
-		await redisClient.expire(`lobby:data:${lobbyCode}`, TIMEOUT);
+		await redisClient.json.set(`lobby:${lobbyCode}:data`, '$', {});
+		await redisClient.expire(`lobby:${lobbyCode}:data`, TIMEOUT);
+
+		await redisClient.json.set(`lobby:${lobbyCode}:bans`, '$', []);
+		await redisClient.expire(`lobby:${lobbyCode}:bans`, TIMEOUT);
 
 	} catch(err) {
 		Logger.error(err);
@@ -281,7 +283,7 @@ export const leave = async (playerName, lobbyCode) => {
 	try {
 
 		await redisClient.json.del(`lobby:${lobbyCode}`, '$');
-		await redisClient.json.del(`lobby:data:${lobbyCode}`);
+		await redisClient.json.del(`lobby:${lobbyCode}:data`);
 		success = true;
 
 	} catch(err) {
@@ -560,7 +562,7 @@ export const setLobbyData = async (lobbyCode, newLobbyData) => {
 	try {
 		const oldLobbyData = await getLobbyData(lobbyCode);
 		const newLobbyObj = mergeDeep(oldLobbyData, newLobbyData);
-		await redisClient.json.set(`lobby:data:${lobbyCode}`, '$', newLobbyObj);
+		await redisClient.json.set(`lobby:${lobbyCode}:data`, '$', newLobbyObj);
 	} catch(err) {
 		Logger.error(err);
 		return false;
@@ -576,7 +578,7 @@ export const setLobbyData = async (lobbyCode, newLobbyData) => {
 export const getLobbyData = async (lobbyCode) => {
 	let lobbyData = null;
 	try {
-		lobbyData = await redisClient.json.get(`lobby:data:${lobbyCode}`);
+		lobbyData = await redisClient.json.get(`lobby:${lobbyCode}:data`);
 	} catch(err) {
 		Logger.error(err);
 		return null;
@@ -611,14 +613,14 @@ export const banPlayer = async (lobbyCode, playerAddress) => {
 
 	try {
 
-		const bans = await redisClient.json.get(`lobby:${lobbyCode}`, { path: [`.bans`] });
+		const bans = await redisClient.json.get(`lobby:${lobbyCode}:bans`, { path: [`.`] });
 
 		let newBans = [...bans];
 		if(!bans.includes(playerAddress)) {
 			newBans.push(playerAddress);
 		}
 
-		await redisClient.json.set(`lobby:${lobbyCode}`, '.bans', newBans);
+		await redisClient.json.set(`lobby:${lobbyCode}:bans`, '$', newBans);
 		lobby = get(lobbyCode);
 
 	} catch(err) {
@@ -637,7 +639,7 @@ export const banPlayer = async (lobbyCode, playerAddress) => {
 export const getBans = async (lobbyCode) => {
 	try {
 
-		const bans = await redisClient.json.get(`lobby:${lobbyCode}`, { path: [`.bans`] });
+		const bans = await redisClient.json.get(`lobby:${lobbyCode}:bans`, { path: [`.`] });
 
 		return bans;
 

@@ -31,7 +31,7 @@ const BanLobby = async (io, socket, data) => {
 		// Remove player from the lobby
 		let lobby = await Lobby.leave(data.playerName, data.lobbyCode);
 		if(lobby === null) {
-			throw new Erro(`Unable to kick player: ${data.playerName}`);
+			throw new Error(`Unable to kick player: ${data.playerName}`);
 		}
 
 		// Ban the player
