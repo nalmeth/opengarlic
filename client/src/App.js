@@ -81,7 +81,7 @@ const App = ({ socket }) => {
 			setLobbyData(prevData => '');
 		},
 		LobbyJoined: (name) => {
-			console.log('LobbyJoined', name);
+			// console.log('LobbyJoined', name);
 			setPlayerName(name);
 		},
 		LobbyUpdated: (lobby) => {
