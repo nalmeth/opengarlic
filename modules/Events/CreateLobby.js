@@ -1,5 +1,6 @@
 import * as Lobby from '../Lobby.js';
 import Logger from '../Logger.js';
+import filenamify from "filenamify";
 
 /**
  * Create Lobby Event
@@ -9,12 +10,14 @@ import Logger from '../Logger.js';
  */
 const CreateLobby = async (io, socket, data) => {
 
-	Logger.info(`Create ${data.playerName}`);
+	const playerName = filenamify(data.playerName);
+
+	Logger.info(`Create ${playerName}`);
 
 	try {
 
 		// Create the lobby
-		const lobby = await Lobby.create(data.playerName, data.appScreen);
+		const lobby = await Lobby.create(playerName, data.appScreen);
 
 		if(lobby === null) {
 			socket.emit('error', {
@@ -31,7 +34,7 @@ const CreateLobby = async (io, socket, data) => {
 
 		// We bother to store these on the socket purely for
 		// the disconnect handler which doesn't receive this information
-		socket.data.playerName = data.playerName;
+		socket.data.playerName = playerName;
 		socket.data.owner = true;
 		socket.data.lobbyCode = lobby.code;
 

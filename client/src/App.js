@@ -61,6 +61,7 @@ const App = ({ socket }) => {
 		LobbyCreated: (lobby) => {
 			// console.log('LobbyCreated');
 			setGameLobby(prevLobby => lobby);
+			setPlayerName(lobby.owner);
 		},
 		LeftLobby: () => {
 			// console.log('LeftLobby');
@@ -79,9 +80,9 @@ const App = ({ socket }) => {
 			setLobbyCode(prevCode => '');
 			setLobbyData(prevData => '');
 		},
-		LobbyJoined: (lobby) => {
-			// console.log('LobbyJoined', lobby);
-			setGameLobby(prevLobby => lobby);
+		LobbyJoined: (name) => {
+			console.log('LobbyJoined', name);
+			setPlayerName(name);
 		},
 		LobbyUpdated: (lobby) => {
 			// console.log('LobbyUpdated', lobby);
