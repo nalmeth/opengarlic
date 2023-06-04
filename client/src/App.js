@@ -123,10 +123,13 @@ const App = ({ socket }) => {
 			// console.log('PONG ', new Date().toISOString());
 		},
 		error: (err) => {
+			if(err.type === 'JoinLobby') {
+				setLobbyCode(prevCode => '');
+				setGameLobby(prevLobby => emptyLobby);
+				setLobbyData(prevData => {});
+				return;
+			}
 			// console.log('Error from server:');
-			// setLobbyCode(prevCode => '');
-			// setGameLobby(prevLobby => emptyLobby);
-			// setLobbyData(prevData => {});
 			console.error(err);
 		}
 	});
