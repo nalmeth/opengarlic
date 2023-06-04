@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
 import Grid from '@mui/material/Unstable_Grid2';
 import {
 	Avatar, Divider, List, ListItem, ListItemAvatar, Typography
@@ -12,6 +12,7 @@ import Bubble, {
 import PlayerList from "../../widgets/PlayerList.js";
 import GameButton from "../../widgets/GameButton.js";
 import { wordWrap } from "../../../modules/Helpers.js";
+import { useSocketEvents } from "../../../modules/SocketEvents.js";
 
 /**
  * End Screen for Standard game mode
@@ -43,20 +44,10 @@ const StdEndGame = ({
 		}
 	};
 
-	useEffect(() => {
-		// console.log('Attach Standard Events');
-		for(const name in events) {
-			socket.on(name, events[name]);
-		}
-
-		return () => {
-			// console.log('Detach Standard Events');
-			for(const name in events) {
-				socket.off(name, events[name]);
-			}
-		}
-		// eslint-disable-next-line
-	}, []);
+	/**
+	 * Attach End Game Events
+	 */
+	useSocketEvents(events);
 
 	return (
 		<>
