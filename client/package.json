@@ -23,7 +23,7 @@
     "react-dom": "^18.2.0",
     "react-konva": "^18.2.10",
     "react-konva-utils": "^1.0.4",
-    "socket.io-client": "^4.6.2"
+    "socket.io-client": "^4.7.0"
   },
   "devDependencies": {
     "@welldone-software/why-did-you-render": "^7.0.1",
