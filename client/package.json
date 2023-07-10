@@ -22,7 +22,7 @@
     "react-countdown-circle-timer": "^3.2.1",
     "react-dom": "^18.2.0",
     "react-konva": "^18.2.10",
-    "react-konva-utils": "^1.0.4",
+    "react-konva-utils": "^1.0.5",
     "socket.io-client": "^4.7.1"
   },
   "devDependencies": {
