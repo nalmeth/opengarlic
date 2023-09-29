@@ -27,7 +27,7 @@
     "nanoid": "^5.0.1",
     "pino": "^8.15.1",
     "rate-limiter-flexible": "^3.0.0",
-    "redis": "^4.6.8",
+    "redis": "^4.6.10",
     "serve-favicon": "^2.5.0",
     "socket.io": "^4.7.2"
   },
