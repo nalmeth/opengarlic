@@ -24,7 +24,7 @@
     "filenamify": "^6.0.0",
     "helmet": "^7.0.0",
     "konva": "^9.2.2",
-    "nanoid": "^5.0.1",
+    "nanoid": "^5.0.2",
     "pino": "^8.16.0",
     "rate-limiter-flexible": "^3.0.0",
     "redis": "^4.6.10",
