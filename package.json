@@ -29,7 +29,7 @@
     "rate-limiter-flexible": "^4.0.0",
     "redis": "^4.6.12",
     "serve-favicon": "^2.5.0",
-    "socket.io": "^4.7.2"
+    "socket.io": "^4.7.3"
   },
   "devDependencies": {
     "concurrently": "^8.2.2",
