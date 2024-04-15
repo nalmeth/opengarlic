@@ -15,7 +15,7 @@
     "@fortawesome/react-fontawesome": "^0.2.0",
     "@mui/icons-material": "^5.15.15",
     "@mui/material": "^5.15.15",
-    "http-proxy-middleware": "^2.0.6",
+    "http-proxy-middleware": "^3.0.0",
     "konva": "^9.3.6",
     "react": "^18.2.0",
     "react-color-palette": "^7.1.0",
