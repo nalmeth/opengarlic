@@ -1,4 +1,4 @@
-import React, { useEffect, useRef } from 'react';
+import React, { useRef } from 'react';
 import Grid from '@mui/material/Unstable_Grid2';
 import { Divider, Typography, useMediaQuery } from '@mui/material';
 
@@ -18,6 +18,7 @@ import '@fontsource/roboto/700.css';
 import './App.css';
 import Header from "./components/Header.js";
 import GameButton from "./components/widgets/GameButton.js";
+import { useSocketEvents } from "./modules/SocketEvents.js";
 
 /**
  * Main App Component
@@ -122,31 +123,21 @@ const App = ({ socket }) => {
 			// console.log('PONG ', new Date().toISOString());
 		},
 		error: (err) => {
+			if(err.type === 'JoinLobby') {
+				setLobbyCode(prevCode => '');
+				setGameLobby(prevLobby => emptyLobby);
+				setLobbyData(prevData => {});
+				return;
+			}
 			// console.log('Error from server:');
-			// setLobbyCode(prevCode => '');
-			// setGameLobby(prevLobby => emptyLobby);
-			// setLobbyData(prevData => {});
 			console.error(err);
 		}
 	});
 
 	/**
-	 * On Init, setup our socket object
+	 * Attach App Events
 	 */
-	useEffect(() => {
-		// console.log('Attach App Events');
-		for(const name in events) {
-			socket.on(name, events[name]);
-		}
-
-		return () => {
-			// console.log('Detach App Events');
-			for(const name in events) {
-				socket.off(name, events[name]);
-			}
-		}
-		// eslint-disable-next-line
-	}, []);
+	useSocketEvents(events);
 
 	const isSmall = useMediaQuery(theme => theme.breakpoints.down('md'));
 

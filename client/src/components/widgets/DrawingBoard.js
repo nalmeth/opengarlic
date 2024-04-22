@@ -37,8 +37,8 @@ const DrawingBoard = (props) => {
 	// Get dimensions to use for the canvas. Size within window
 	// bounds up to max size
 	const getDimensions = () => ({
-		x: (window.innerWidth > MAX_WIDTH ? MAX_WIDTH : window.innerWidth),
-		y: window.innerHeight > MAX_HEIGHT ? MAX_HEIGHT : window.innerHeight
+		width: (window.innerWidth > MAX_WIDTH ? MAX_WIDTH : window.innerWidth),
+		height: window.innerHeight > MAX_HEIGHT ? MAX_HEIGHT : window.innerHeight
 	});
 
 	// Get the amount the canvas has been scaled 0-1
@@ -60,8 +60,8 @@ const DrawingBoard = (props) => {
 			const newScale = getScale();
 			// const aspect = round2(newDims.x / newDims.y);
 			// console.log(newDims.x, newDims.y, 'scale', newScale, 'aspect', aspect);
-			newDims.x = newDims.x < MAX_WIDTH ? newDims.x-25 : newDims.x;
-			newDims.y = Math.round(newDims.y * newScale);
+			newDims.width = newDims.width < MAX_WIDTH ? newDims.width-25 : newDims.width;
+			newDims.height = Math.round(newDims.height * newScale);
 
 			// Force bgbox to fill canvas when scaled
 			updateShape(0, { width: 1000, height: 600 });
@@ -82,9 +82,9 @@ const DrawingBoard = (props) => {
 		strokeWidth: 1,
 		brushColor: '#fff',
 		fillColor: '#fff',
-		points: [0, 0, dimensions.x, dimensions.y],
-		width: dimensions.x,
-		height: dimensions.y,
+		points: [0, 0, dimensions.width, dimensions.height],
+		width: dimensions.width,
+		height: dimensions.height,
 	}
 
 	// Load shape data if supplied as props
@@ -444,8 +444,8 @@ const DrawingBoard = (props) => {
 
 			<Stage
 				ref={props.stageRef}
-				width={dimensions.x}
-				height={dimensions.y}
+				width={dimensions.width}
+				height={dimensions.height}
 				scaleX={scale}
 				scaleY={scale}
 				// onClick={handleClick}

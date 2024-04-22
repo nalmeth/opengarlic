@@ -24,7 +24,7 @@ const JoinLobby = async(io, socket, data) => {
 		}
 
 		const bans = await Lobby.getBans(data.lobbyCode);
-		if(bans.includes(socket.handshake.address)) {
+		if(bans && bans.includes(socket.handshake.address)) {
 			banned = true;
 			throw new Error(`Unable to join. You are banned from this lobby.`);
 		}

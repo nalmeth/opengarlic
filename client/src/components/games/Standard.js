@@ -1,4 +1,4 @@
-import React, { useEffect, useRef, useState } from 'react';
+import React, { useRef, useState } from 'react';
 import Grid from '@mui/material/Unstable_Grid2';
 import GameButton from "../widgets/GameButton.js";
 import Screen0 from "../screens/Standard/Screen0.js";
@@ -7,6 +7,7 @@ import Screen2 from "../screens/Standard/Screen2.js";
 import StdEndGame from "../screens/Standard/EndGame.js";
 import PlayerStatus from "../../modules/PlayerStatus.js";
 import GameNumericInput from "../widgets/GameNumericInput.js";
+import { useSocketEvents } from "../../modules/SocketEvents.js"
 
 
 /**
@@ -147,21 +148,7 @@ const Standard = ({
 	/**
 	 * Attach Standard mode events
 	 */
-	useEffect(() => {
-		// console.log('Attach Standard Events');
-		for(const name in events) {
-			socket.on(name, events[name]);
-		}
-
-		return () => {
-			// console.log('Detach Standard Events');
-			for(const name in events) {
-				socket.off(name, events[name]);
-			}
-		}
-		// eslint-disable-next-line
-	}, []);
-
+	useSocketEvents(events);
 
 	/**
 	 * Handle Done Event
