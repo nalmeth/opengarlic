@@ -284,6 +284,7 @@ export const leave = async (playerName, lobbyCode) => {
 
 		await redisClient.json.del(`lobby:${lobbyCode}`, '$');
 		await redisClient.json.del(`lobby:${lobbyCode}:data`);
+		await redisClient.json.del(`lobby:${lobbyCode}:bans`);
 		success = true;
 
 	} catch(err) {
