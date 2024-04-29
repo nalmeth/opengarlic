@@ -26,7 +26,7 @@
     "konva": "^9.3.6",
     "nanoid": "^5.0.7",
     "pino": "^8.20.0",
-    "rate-limiter-flexible": "^5.0.0",
+    "rate-limiter-flexible": "^5.0.3",
     "redis": "^4.6.13",
     "serve-favicon": "^2.5.0",
     "socket.io": "^4.7.5"
