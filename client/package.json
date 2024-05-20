@@ -14,7 +14,7 @@
     "@fortawesome/free-solid-svg-icons": "^6.5.2",
     "@fortawesome/react-fontawesome": "^0.2.0",
     "@mui/icons-material": "^5.15.17",
-    "@mui/material": "^5.15.17",
+    "@mui/material": "^5.15.18",
     "http-proxy-middleware": "^3.0.0",
     "konva": "^9.3.6",
     "react": "^18.3.1",
