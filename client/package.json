@@ -28,7 +28,7 @@
   "devDependencies": {
     "@welldone-software/why-did-you-render": "^8.0.1",
     "react-scripts": "^5.0.1",
-    "web-vitals": "^4.0.0"
+    "web-vitals": "^4.0.1"
   },
   "scripts": {
     "start": "react-scripts start",
