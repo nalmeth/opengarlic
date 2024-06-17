@@ -26,7 +26,7 @@
     "socket.io-client": "^4.7.5"
   },
   "devDependencies": {
-    "@welldone-software/why-did-you-render": "^8.0.1",
+    "@welldone-software/why-did-you-render": "^8.0.3",
     "react-scripts": "^5.0.1",
     "web-vitals": "^4.1.0"
   },
