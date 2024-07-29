@@ -25,7 +25,7 @@
     "helmet": "^7.1.0",
     "konva": "^9.3.13",
     "nanoid": "^5.0.7",
-    "pino": "^9.3.1",
+    "pino": "^9.3.2",
     "rate-limiter-flexible": "^5.0.3",
     "redis": "^4.6.15",
     "serve-favicon": "^2.5.0",
