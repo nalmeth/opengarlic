@@ -19,7 +19,7 @@
     "body-parser": "^1.20.3",
     "canvas": "^2.11.2",
     "cookie-parser": "^1.4.7",
-    "dotenv": "^16.4.5",
+    "dotenv": "^16.4.7",
     "express": "^4.21.2",
     "filenamify": "^6.0.0",
     "helmet": "^8.0.0",
