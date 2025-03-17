@@ -16,7 +16,7 @@
     "@mui/icons-material": "^6.4.7",
     "@mui/material": "^6.4.7",
     "http-proxy-middleware": "^3.0.3",
-    "konva": "^9.3.18",
+    "konva": "^9.3.19",
     "react": "^19.0.0",
     "react-color-palette": "^7.3.0",
     "react-countdown-circle-timer": "^3.2.1",
