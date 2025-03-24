@@ -23,7 +23,7 @@
     "express": "^4.21.2",
     "filenamify": "^6.0.0",
     "helmet": "^8.0.0",
-    "konva": "^9.3.19",
+    "konva": "^9.3.20",
     "nanoid": "^5.1.4",
     "pino": "^9.6.0",
     "rate-limiter-flexible": "^6.1.0",
