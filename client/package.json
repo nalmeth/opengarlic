@@ -17,7 +17,7 @@
     "@mui/material": "^6.4.8",
     "http-proxy-middleware": "^3.0.3",
     "konva": "^9.3.20",
-    "react": "^19.0.0",
+    "react": "^19.1.0",
     "react-color-palette": "^7.3.0",
     "react-countdown-circle-timer": "^3.2.1",
     "react-dom": "^19.0.0",
