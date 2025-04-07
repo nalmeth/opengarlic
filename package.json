@@ -20,7 +20,7 @@
     "canvas": "^3.1.0",
     "cookie-parser": "^1.4.7",
     "dotenv": "^16.4.7",
-    "express": "^4.21.2",
+    "express": "^5.1.0",
     "filenamify": "^6.0.0",
     "helmet": "^8.1.0",
     "konva": "^9.3.20",
