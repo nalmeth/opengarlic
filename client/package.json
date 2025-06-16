@@ -21,7 +21,7 @@
     "react-color-palette": "^7.3.0",
     "react-countdown-circle-timer": "^3.2.1",
     "react-dom": "^19.1.0",
-    "react-konva": "^19.0.5",
+    "react-konva": "^19.0.6",
     "react-konva-utils": "^1.1.0",
     "socket.io-client": "^4.8.1"
   },
