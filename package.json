@@ -17,7 +17,7 @@
   "dependencies": {
     "@socket.io/admin-ui": "^0.5.1",
     "body-parser": "^2.2.0",
-    "canvas": "^3.1.2",
+    "canvas": "^3.2.0",
     "cookie-parser": "^1.4.7",
     "dotenv": "^17.2.1",
     "express": "^5.1.0",
