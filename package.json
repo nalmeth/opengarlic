@@ -32,7 +32,7 @@
     "socket.io": "^4.8.1"
   },
   "devDependencies": {
-    "concurrently": "^9.2.0",
+    "concurrently": "^9.2.1",
     "cross-env": "^10.0.0",
     "env-cmd": "^11.0.0"
   },
