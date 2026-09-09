@@ -10,7 +10,7 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faGear } from "@fortawesome/free-solid-svg-icons";
 
 import Games from '../modules/Games';
-import PlayerStatus from '../modules/PlayerStatus';
+import { ConnectionStatus } from '@opengarlic/shared';
 import PlayerList from "./widgets/PlayerList.js";
 import SettingsDialog from "./SettingsDialog.js";
 
@@ -54,7 +54,7 @@ const Lobby = ({
 	const [dialogSettings, setDialogSettings] = useState(Games[0].settings);
 
 	// Players to show
-	const displayPlayers = players.filter(player => player.status !== PlayerStatus.DISCONNECTED);
+	const displayPlayers = players.filter(player => player.connected !== ConnectionStatus.DISCONNECTED);
 
 	// Media queries to adjust styles based on size
 	const isXS = useMediaQuery(theme => theme.breakpoints.only('xs'));

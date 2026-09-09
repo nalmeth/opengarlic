@@ -1,6 +1,6 @@
 import React, { useState, useRef, useEffect } from "react";
 import { Box } from '@mui/material';
-import { Stage, Layer, Line, Rect, Circle } from 'react-konva';
+import { Stage, Layer, Line, Rect, Circle, Shape } from 'react-konva';
 
 import { DrawingTools } from "./DrawingTools";
 import {
@@ -8,6 +8,8 @@ import {
 	isInsideRect, isInsideRectStroke,
 	isInsideCircle, isInsideCircleStroke
 } from "../../modules/Helpers.js";
+import { floodFill, maskToDataUrl } from "../../modules/FloodFill.js";
+import { useServerConfig } from "../../modules/Config.js";
 
 /**
  * The Canvas Drawing Area
@@ -33,6 +35,10 @@ const DrawingBoard = (props) => {
 
 	const MAX_WIDTH = props.MAX_WIDTH;
 	const MAX_HEIGHT = props.MAX_HEIGHT;
+
+	// Server-configurable flood fill tuning (falls back to sane defaults
+	// until the server responds - see modules/Config.js)
+	const { floodFill: floodFillConfig } = useServerConfig();
 
 	// Get dimensions to use for the canvas. Size within window
 	// bounds up to max size
@@ -113,7 +119,8 @@ const DrawingBoard = (props) => {
 		if( lockBoard ||								// Ignore if board is locked
 			event.evt.button === 2 ||					// Ignore right-clicks
 			event.evt.ctrlKey ||						// Ignore ctrl+click
-			props.tool.name === DrawingTools.Fill.name  // Ignore Paint fill tool
+			props.tool.name === DrawingTools.Fill.name ||		// Ignore Paint fill tool
+			props.tool.name === DrawingTools.FloodFill.name	// Ignore Flood fill tool
 		) return;
 
 		isDrawing.current = true;
@@ -173,7 +180,8 @@ const DrawingBoard = (props) => {
 	const handleMouseMove = (event) => {
 		if( lockBoard ||									// Ignore if board is locked
 			!isDrawing.current ||							// Ignore if we aren't drawing
-			props.tool.name === DrawingTools.Fill.name		// Ignore paint fill tool
+			props.tool.name === DrawingTools.Fill.name ||		// Ignore paint fill tool
+			props.tool.name === DrawingTools.FloodFill.name	// Ignore flood fill tool
 		) return;
 
 		const stage = event.target.getStage();
@@ -347,6 +355,78 @@ const DrawingBoard = (props) => {
 	}
 
 	/**
+	 * Handle a click with the Flood Fill tool active. Unlike handleClick,
+	 * this isn't about which single shape was clicked - it rasterizes the
+	 * current drawing and floods outward from the click point across
+	 * contiguous same-colored pixels, so it can fill a region bounded by
+	 * more than one overlapping outlined shape.
+	 * @param {object} event
+	 */
+	const handleFloodFillClick = (event) => {
+		if( lockBoard ||
+			event.evt.button === 2 ||
+			props.tool.name !== DrawingTools.FloodFill.name
+		) return;
+
+		const stage = event.target.getStage();
+		const position = stage.getPointerPosition();
+		const transform = stage.getAbsoluteTransform().copy();
+		const point = transform.invert().point(position);
+		const clickX = Math.round(point.x);
+		const clickY = Math.round(point.y);
+
+		if(clickX < 0 || clickY < 0 || clickX >= MAX_WIDTH || clickY >= MAX_HEIGHT) return;
+
+		// Temporarily render the stage at full, unscaled logical resolution
+		// so pixel coordinates line up 1:1 with the shapes' own point
+		// coordinates - the same trick already used when exporting the
+		// finished drawing for the round's GIF recap.
+		const prevWidth = stage.width();
+		const prevHeight = stage.height();
+		const prevScale = stage.scale();
+
+		stage.width(MAX_WIDTH);
+		stage.height(MAX_HEIGHT);
+		stage.scale({ x: 1, y: 1 });
+
+		const canvas = stage.toCanvas();
+		const ctx = canvas.getContext('2d');
+		const imageData = ctx.getImageData(0, 0, MAX_WIDTH, MAX_HEIGHT);
+
+		stage.width(prevWidth);
+		stage.height(prevHeight);
+		stage.scale(prevScale);
+		stage.batchDraw();
+
+		const result = floodFill(imageData, clickX, clickY, {
+			colorTolerance: floodFillConfig.colorTolerance,
+			gapTolerance: floodFillConfig.gapTolerance
+		});
+
+		// Nothing fillable at that point (e.g. clicked right on a boundary)
+		if(!result) return;
+
+		const newShape = {
+			tool: DrawingTools.FloodFill.name,
+			fillColor: props.brushColor,
+			opacity: props.opacity,
+			x: result.bbox.x,
+			y: result.bbox.y,
+			width: result.bbox.width,
+			height: result.bbox.height,
+			maskData: maskToDataUrl(result)
+		};
+
+		// Insert just above the background rect (index 0) so it never
+		// covers any stroke that was already drawn on top of it.
+		setShapes(prevShapes => {
+			const nextShapes = [...prevShapes];
+			nextShapes.splice(1, 0, newShape);
+			return nextShapes;
+		});
+	}
+
+	/**
 	 * Returns the Filled variant of the shape name
 	 * @param {string} name String name of drawing tool
 	 * @returns {string}
@@ -449,6 +529,7 @@ const DrawingBoard = (props) => {
 				scaleX={scale}
 				scaleY={scale}
 				// onClick={handleClick}
+				onClick={handleFloodFillClick}
 				onMouseDown={handleMouseDown}
 				onMouseUp={handleMouseUp}
 				onMouseMove={handleMouseMove}
@@ -521,6 +602,10 @@ const DrawingBoard = (props) => {
 											onClick={handleClick}
 										/>
 									)
+								case DrawingTools.FloodFill.name:
+									return (
+										<FloodFillShape key={idx} shape={shape} />
+									)
 								default:
 									return null;
 							}
@@ -535,3 +620,43 @@ const DrawingBoard = (props) => {
 
 
 export default DrawingBoard;
+
+/**
+ * Renders a Flood Fill shape by compositing its colorless mask image with
+ * its current fillColor (globalCompositeOperation: 'source-in'). Keeping
+ * color out of the stored mask is what lets fillColor be changed later
+ * without re-running the flood fill.
+ * @prop {object} shape Shape data: x, y, width, height, fillColor, maskData, opacity
+ * @returns {JSX.Element|null}
+ */
+const FloodFillShape = React.memo(({ shape }) => {
+	const [maskImage, setMaskImage] = useState(null);
+
+	useEffect(() => {
+		if(!shape.maskData) return;
+		const img = new window.Image();
+		img.onload = () => setMaskImage(img);
+		img.src = shape.maskData;
+	}, [shape.maskData]);
+
+	if(!maskImage) return null;
+
+	return (
+		<Shape
+			x={shape.x}
+			y={shape.y}
+			width={shape.width}
+			height={shape.height}
+			opacity={shape.opacity}
+			listening={false}
+			sceneFunc={(ctx, node) => {
+				ctx.save();
+				ctx.drawImage(maskImage, 0, 0, shape.width, shape.height);
+				ctx.globalCompositeOperation = 'source-in';
+				ctx.fillStyle = shape.fillColor;
+				ctx.fillRect(0, 0, shape.width, shape.height);
+				ctx.restore();
+			}}
+		/>
+	)
+});

@@ -1,7 +1,6 @@
 import * as Lobby from '../Lobby.js';
 import Logger from '../Logger.js';
-import { PlayerStatus } from "../PlayerStatus.js";
-import { ConnectionStatus } from "../ConnectionStatus.js";
+import { PlayerStatus, ConnectionStatus } from '@opengarlic/shared';
 
 /**
  * Player Done Event

@@ -1,9 +1,7 @@
 import { getConnection } from './RedisConnectionManager.js';
 import Logger from './Logger.js';
 import { mergeDeep } from './Helpers.js';
-import { PlayerStatus } from './PlayerStatus.js'
-import { LobbyStatus } from "./LobbyStatus.js";
-import { ConnectionStatus } from "./ConnectionStatus.js";
+import { PlayerStatus, LobbyStatus, ConnectionStatus } from '@opengarlic/shared';
 
 /**
  * INTERNAL

@@ -24,11 +24,11 @@ services:
     image: opengarlic/client
     restart: unless-stopped
     build:
-      context: ./client
+      context: .
+      dockerfile: client/Dockerfile
       args:
         REACT_APP_SOCKET_SERVER: ${REACT_APP_SOCKET_SERVER}
         LE_DOMAIN: ${LE_DOMAIN}
-      dockerfile: Dockerfile
     env_file:
       - .env
     volumes:

@@ -22,12 +22,18 @@ mkdir /root/.fonts
 WORKDIR /app
 ENV PATH /app/node_modules/.bin:$PATH
 
-COPY package*.json /app
-RUN npm ci
+# Workspace manifests first, for better layer caching. Only the server and
+# shared workspaces are installed here - the client workspace is left out
+# of this image entirely.
+COPY package*.json /app/
+COPY server/package.json /app/server/package.json
+COPY packages/shared/package.json /app/packages/shared/package.json
 
-COPY ./server.js /app
+RUN npm ci --workspace=server --workspace=packages/shared
+
+COPY ./server /app/server
+COPY ./packages/shared /app/packages/shared
 COPY .env /app
-COPY ./modules /app/modules
 COPY ./fonts /root/.fonts
 
-CMD ["npm", "run", "start"]
+CMD ["npm", "run", "start", "-w", "server"]

@@ -1,0 +1,8 @@
+{
+	"name": "@opengarlic/shared",
+	"version": "1.0.0",
+	"private": true,
+	"type": "module",
+	"main": "index.js",
+	"description": "Constants shared between the OpenGarlic server and client, so both sides can never drift out of sync."
+}

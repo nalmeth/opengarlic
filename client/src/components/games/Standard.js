@@ -5,7 +5,7 @@ import Screen0 from "../screens/Standard/Screen0.js";
 import Screen1 from "../screens/Standard/Screen1.js";
 import Screen2 from "../screens/Standard/Screen2.js";
 import StdEndGame from "../screens/Standard/EndGame.js";
-import PlayerStatus from "../../modules/PlayerStatus.js";
+import { PlayerStatus } from "@opengarlic/shared";
 import GameNumericInput from "../widgets/GameNumericInput.js";
 import { useSocketEvents } from "../../modules/SocketEvents.js"
 

@@ -1,9 +1,7 @@
-import { ConnectionStatus } from "./ConnectionStatus.js";
 import { isEmpty, isTrue } from "./Helpers.js";
 import * as Lobby from './Lobby.js';
-import { LobbyStatus } from "./LobbyStatus.js";
 import Logger from './Logger.js';
-import { PlayerStatus } from "./PlayerStatus.js";
+import { ConnectionStatus, LobbyStatus, PlayerStatus } from '@opengarlic/shared';
 
 /**
  * Handle player leaving a lobby logic

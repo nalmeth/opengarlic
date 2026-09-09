@@ -5,7 +5,7 @@ import { Divider, Typography, useMediaQuery } from '@mui/material';
 import { useLocalStorage } from './modules/Storage';
 import Games from './modules/Games';
 import AppScreens from './modules/AppScreens';
-import LobbyStatus from './modules/LobbyStatus';
+import { LobbyStatus } from '@opengarlic/shared';
 
 import Login from './components/Login';
 import Lobby from './components/Lobby';

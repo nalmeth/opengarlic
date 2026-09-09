@@ -31,8 +31,9 @@ export const getConnection = async({ name, host, port, user, pass }) => {
 	if(isEmpty(name)) throw new Error('Redis connection name required.');
 
 	const hasName = clients.hasOwnProperty(name);
-	// Return pre-existing connections
-	if(hasName || (hasName && !clients[name]?.connected)) return clients[name];
+	// Return pre-existing, still-connected connection. If we have a stale
+	// (disconnected) client under this name, fall through and recreate it.
+	if(hasName && clients[name]?.connected) return clients[name];
 
 	const url = buildConnectionUrl(host, port, user, pass);
 

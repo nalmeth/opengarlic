@@ -1,6 +1,6 @@
 import { io } from "socket.io-client";
 
-const SOCKET_SERVER = process.env.REACT_APP_SOCKET_SERVER;
+const SOCKET_SERVER = import.meta.env.REACT_APP_SOCKET_SERVER;
 
 // console.log(`Connecting to: ${SOCKET_SERVER}`);
 

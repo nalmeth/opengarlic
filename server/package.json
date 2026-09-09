@@ -1,0 +1,36 @@
+{
+	"name": "@opengarlic/server",
+	"version": "1.0.0",
+	"private": true,
+	"description": "Express Server Hosting OpenGarlic",
+	"type": "module",
+	"engines": {
+		"node": ">=20.19.0"
+	},
+	"main": "server.js",
+	"scripts": {
+		"start": "node -r dotenv/config server.js dotenv_config_path=../.env",
+		"dev-server": "cross-env NODE_ENV=development node -r dotenv/config server.js dotenv_config_path=../.env"
+	},
+	"dependencies": {
+		"@opengarlic/shared": "*",
+		"@socket.io/admin-ui": "^0.5.1",
+		"body-parser": "^2.3.0",
+		"canvas": "^3.2.3",
+		"cookie-parser": "^1.4.7",
+		"dotenv": "^17.4.2",
+		"express": "^5.2.1",
+		"filenamify": "^7.0.3",
+		"helmet": "^8.3.0",
+		"konva": "^10.3.2",
+		"nanoid": "^6.0.1",
+		"pino": "^10.3.1",
+		"rate-limiter-flexible": "^11.2.0",
+		"redis": "^6.2.1",
+		"serve-favicon": "^2.5.1",
+		"socket.io": "^4.8.3"
+	},
+	"devDependencies": {
+		"cross-env": "^10.1.0"
+	}
+}

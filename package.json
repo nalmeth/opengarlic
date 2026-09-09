@@ -1,42 +1,28 @@
 {
-  "name": "opengarlic.server",
-  "version": "1.0.0",
-  "description": "Express Server Hosting OpenGarlic",
-  "type": "module",
-  "engines": {
-    "node": ">=18.x"
-  },
-  "main": "server.js",
-  "scripts": {
-    "start": "node -r dotenv/config server.js",
-    "build": "env-cmd --use-shell \"cd client/ && npm install && npm run build\"",
-    "dev-server": "cross-env NODE_ENV=development node -r dotenv/config server.js",
-    "dev-client": "env-cmd --use-shell \"cd client && npm start\"",
-    "dev": "concurrently --kill-others-on-fail \"npm run dev-server\" \"npm run dev-client\""
-  },
-  "dependencies": {
-    "@socket.io/admin-ui": "^0.5.1",
-    "body-parser": "^2.3.0",
-    "canvas": "^3.2.3",
-    "cookie-parser": "^1.4.7",
-    "dotenv": "^17.4.2",
-    "express": "^5.2.1",
-    "filenamify": "^7.0.3",
-    "helmet": "^8.3.0",
-    "konva": "^10.3.2",
-    "nanoid": "^6.0.1",
-    "pino": "^10.3.1",
-    "rate-limiter-flexible": "^11.2.0",
-    "redis": "^6.2.1",
-    "serve-favicon": "^2.5.1",
-    "socket.io": "^4.8.3"
-  },
-  "devDependencies": {
-    "concurrently": "^10.0.5",
-    "cross-env": "^10.1.0",
-    "env-cmd": "^11.0.0"
-  },
-  "overrides": {
-    "nth-check": "2.1.1"
-  }
+	"name": "opengarlic",
+	"version": "1.0.0",
+	"private": true,
+	"description": "OpenGarlic monorepo - server, client, and shared workspaces",
+	"engines": {
+		"node": ">=20.19.0"
+	},
+	"workspaces": [
+		"server",
+		"client",
+		"packages/*"
+	],
+	"scripts": {
+		"start": "npm run start -w server",
+		"build": "env-cmd --use-shell \"npm run build -w client\"",
+		"dev-server": "npm run dev-server -w server",
+		"dev-client": "env-cmd --use-shell \"npm run start -w client\"",
+		"dev": "concurrently --kill-others-on-fail \"npm run dev-server\" \"npm run dev-client\""
+	},
+	"devDependencies": {
+		"concurrently": "^10.0.5",
+		"env-cmd": "^11.0.0"
+	},
+	"overrides": {
+		"nth-check": "2.1.1"
+	}
 }

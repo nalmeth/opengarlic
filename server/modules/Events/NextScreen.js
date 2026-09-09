@@ -1,8 +1,7 @@
 import * as Lobby from '../Lobby.js';
 import Logger from '../Logger.js';
 import { isOwner } from '../EventHelper.js';
-import { ConnectionStatus } from '../ConnectionStatus.js';
-import { PlayerStatus } from '../PlayerStatus.js';
+import { ConnectionStatus, PlayerStatus } from '@opengarlic/shared';
 
 /**
  * Next Screen Event
