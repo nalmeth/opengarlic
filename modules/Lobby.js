@@ -440,12 +440,16 @@ export const setOwner = async (playerName, lobbyCode) => {
 				owner: true
 			};
 
-			// Move to the top of the list, so they appear first
-			// newPlayers.unshift(playerOwner);
-			newPlayers = players
+			// Move to the top of the list, so they appear first.
+			// NOTE: Array.prototype.unshift() mutates in place and returns the
+			// new length (a number), not the array - so it can't be chained.
+			// Build the new array with spread instead.
+			newPlayers = [
+				playerOwner,
+				...players
 					.filter(player => player.name.toLowerCase() !== newOwner)
 					.map(player => ({...player, owner: false}))
-					.unshift(playerOwner);
+			];
 		}
 
 		await redisClient.json.set(`lobby:${lobbyCode}`, '.players', newPlayers);

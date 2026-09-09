@@ -1,5 +1,6 @@
 import Logger from '../Logger.js';
 import * as Lobby from '../Lobby.js';
+import { isOwner } from '../EventHelper.js';
 
 /**
  * Ban Lobby Event
@@ -11,6 +12,11 @@ const BanLobby = async (io, socket, data) => {
 	Logger.info(`Banning ${data.playerName}`);
 
 	try {
+
+		const currentLobby = await Lobby.get(data.lobbyCode);
+		if(!isOwner(socket, currentLobby)) {
+			throw new Error('Only the lobby owner can ban players.');
+		}
 
 		const playerSockets = await io.in(data.lobbyCode).fetchSockets();
 

@@ -2,7 +2,7 @@ import * as Lobby from '../Lobby.js';
 import Logger from "../Logger.js";
 import FrameMakers from '../FrameMakers.js';
 import fs from 'node:fs/promises';
-import { fileExists } from "../Helpers.js";
+import { fileExists, isEmpty } from "../Helpers.js";
 import { spawn } from "node:child_process";
 
 /**
@@ -15,6 +15,20 @@ const CreateGIF = async (io, socket, data) => {
 	Logger.info(`Making GIF ${data.lobbyCode}`);
 
 	try {
+
+		// Use the player name recorded on the socket session (sanitized via
+		// filenamify at Join/CreateLobby time), not the raw client-supplied
+		// data.playerName - this value is used to build filesystem paths
+		// below, so it must not be trusted straight from the event payload.
+		const playerName = socket.data.playerName;
+
+		if(isEmpty(playerName) || socket.data.lobbyCode !== data.lobbyCode) {
+			socket.emit('error', {
+				type: 'CreateGIF',
+				message: 'You must be an active member of this lobby to create a GIF.'
+			});
+			return;
+		}
 
 		const lobby = await Lobby.get(data.lobbyCode);
 
@@ -44,7 +58,7 @@ const CreateGIF = async (io, socket, data) => {
 		})();
 
 		const GIFDIR = `${SAVE_PATH}/${data.lobbyCode}`;
-		const GIFNAME = `${data.playerName}.gif`;
+		const GIFNAME = `${playerName}.gif`;
 
 		// Check if the gif already exists
 		if(await fileExists(`${GIFDIR}/${GIFNAME}`)) {
@@ -68,7 +82,7 @@ const CreateGIF = async (io, socket, data) => {
 
 		console.log('Generate Frames');
 
-		await maker.generateFrames(data.lobbyCode, data.playerName, GIFDIR);
+		await maker.generateFrames(data.lobbyCode, playerName, GIFDIR);
 
 		/**
 		 * Create the actual gif from the frames
@@ -80,7 +94,7 @@ const CreateGIF = async (io, socket, data) => {
 
 		// Get list of frames
 		let frames = await fs.readdir(`${GIFDIR}`);
-		frames = frames.filter(frame => frame.startsWith(data.playerName));
+		frames = frames.filter(frame => frame.startsWith(playerName));
 		gifArgs = gifArgs.concat(frames);
 
 		console.log('Generate GIF');

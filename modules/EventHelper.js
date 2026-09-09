@@ -68,4 +68,18 @@ const LeavePlayer = async (io, socket) => {
 	socket.data.owner = false;
 }
 
+/**
+ * Check whether the requesting socket is the current owner of the lobby.
+ * Compares the session-bound player name (set at Join/CreateLobby time,
+ * not a client-supplied field on the incoming event) against the lobby's
+ * recorded owner.
+ * @param {object} socket Socket Object
+ * @param {object} lobby Lobby Object
+ * @returns {boolean}
+ */
+export const isOwner = (socket, lobby) => {
+	if(isEmpty(socket?.data?.playerName) || isEmpty(lobby?.owner)) return false;
+	return socket.data.playerName.toLowerCase() === lobby.owner.toLowerCase();
+}
+
 export default LeavePlayer;

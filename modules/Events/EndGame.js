@@ -1,5 +1,6 @@
 import * as Lobby from '../Lobby.js';
 import Logger from "../Logger.js";
+import { isOwner } from '../EventHelper.js';
 
 /**
  * End Game Event
@@ -14,6 +15,11 @@ const EndGame = async (io, socket, data) => {
 
 		if(!data.lobbyCode) {
 			throw new Error(`Invalid Lobby Code: ${data.lobbyCode}`);
+		}
+
+		const currentLobby = await Lobby.get(data.lobbyCode);
+		if(!isOwner(socket, currentLobby)) {
+			throw new Error('Only the lobby owner can end the game.');
 		}
 
 		let lobby = null;

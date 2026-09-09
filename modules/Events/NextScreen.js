@@ -1,5 +1,8 @@
 import * as Lobby from '../Lobby.js';
 import Logger from '../Logger.js';
+import { isOwner } from '../EventHelper.js';
+import { ConnectionStatus } from '../ConnectionStatus.js';
+import { PlayerStatus } from '../PlayerStatus.js';
 
 /**
  * Next Screen Event
@@ -11,6 +14,26 @@ const NextScreen = async(io, socket, data) => {
 	Logger.info(`NEXTSCR ${data.lobbyCode}`);
 
 	try {
+		const currentLobby = await Lobby.get(data.lobbyCode);
+		if(!currentLobby) {
+			throw new Error(`Invalid Lobby ${data.lobbyCode}`);
+		}
+
+		// The lobby owner may always force the next screen. Anyone else may
+		// only advance it once the server's own state confirms every
+		// connected player has actually finished - this is what lets the
+		// "last player to finish advances the screen" flow keep working
+		// without letting any client jump the game ahead early.
+		if(!isOwner(socket, currentLobby)) {
+			const allDone = currentLobby.players.every(player =>
+				player.connected === ConnectionStatus.DISCONNECTED ||
+				player.status === PlayerStatus.DONE
+			);
+			if(!allDone) {
+				throw new Error('Not all players are done yet.');
+			}
+		}
+
 		let lobby = null;
 		let lobbyData = {};
 

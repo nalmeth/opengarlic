@@ -1,5 +1,6 @@
 import * as Lobby from '../Lobby.js';
 import Logger from '../Logger.js';
+import { isOwner } from '../EventHelper.js';
 
 /**
  * Start Game Event
@@ -12,6 +13,11 @@ const StartGame = async (io, socket, data) => {
 	Logger.info(`START ${data.lobbyCode} ${data.mode}`);
 
 	try {
+
+		const currentLobby = await Lobby.get(data.lobbyCode);
+		if(!isOwner(socket, currentLobby)) {
+			throw new Error('Only the lobby owner can start the game.');
+		}
 
 		const lobby = await Lobby.start(
 			data.lobbyCode,

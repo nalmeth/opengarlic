@@ -1,5 +1,6 @@
 import * as Lobby from '../Lobby.js';
 import Logger from '../Logger.js';
+import { isOwner } from '../EventHelper.js';
 
 /**
  * Kick Lobby Event
@@ -10,6 +11,15 @@ import Logger from '../Logger.js';
 const KickLobby = async (io, socket, data) => {
 
 	Logger.info(`KICK ${data.playerName} ${data.lobbyCode}`);
+
+	const currentLobby = await Lobby.get(data.lobbyCode);
+	if(!isOwner(socket, currentLobby)) {
+		socket.emit('error', {
+			type: 'KickLobby',
+			message: 'Only the lobby owner can kick players.'
+		});
+		return;
+	}
 
 	// Get all the sockets in the game room matching the lobbyCode
 	const sockets = await io.in(data.lobbyCode).fetchSockets();
