@@ -37,7 +37,7 @@ process.on('SIGTERM', connectionCleanup);
 // Assign the port the server will listen on
 let SOCKET_SERVER = null;
 try {
-	SOCKET_SERVER = new URL(process.env.REACT_APP_SOCKET_SERVER);
+	SOCKET_SERVER = new URL(process.env.VITE_SOCKET_SERVER);
 } catch(err) {
 	Logger.error('SOCKET_SERVER env var is misconfigured. Please check your .env file.');
 	process.exit(1);

@@ -1,12 +1,12 @@
 import React, { useRef, useState } from 'react';
 import Grid from '@mui/material/Unstable_Grid2';
-import GameButton from "../widgets/GameButton.js";
-import Screen0 from "../screens/Standard/Screen0.js";
-import Screen1 from "../screens/Standard/Screen1.js";
-import Screen2 from "../screens/Standard/Screen2.js";
-import StdEndGame from "../screens/Standard/EndGame.js";
+import GameButton from "../widgets/GameButton.jsx";
+import Screen0 from "../screens/Standard/Screen0.jsx";
+import Screen1 from "../screens/Standard/Screen1.jsx";
+import Screen2 from "../screens/Standard/Screen2.jsx";
+import StdEndGame from "../screens/Standard/EndGame.jsx";
 import { PlayerStatus } from "@opengarlic/shared";
-import GameNumericInput from "../widgets/GameNumericInput.js";
+import GameNumericInput from "../widgets/GameNumericInput.jsx";
 import { useSocketEvents } from "../../modules/SocketEvents.js"
 
 

@@ -1,6 +1,6 @@
 {
 	"name": "opengarlic",
-	"version": "2.0.0",
+	"version": "1.0.0",
 	"private": true,
 	"description": "OpenGarlic monorepo - server, client, and shared workspaces",
 	"engines": {
@@ -24,5 +24,8 @@
 	},
 	"overrides": {
 		"nth-check": "2.1.1"
+	},
+	"allowScripts": {
+		"canvas@3.2.3": true
 	}
 }

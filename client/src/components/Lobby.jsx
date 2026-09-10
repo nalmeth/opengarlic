@@ -5,14 +5,14 @@ import {
 	Button, useMediaQuery, Fab, Box
 } from "@mui/material";
 
-import GameButton from "./widgets/GameButton.js";
+import GameButton from "./widgets/GameButton.jsx";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faGear } from "@fortawesome/free-solid-svg-icons";
 
 import Games from '../modules/Games';
 import { ConnectionStatus } from '@opengarlic/shared';
-import PlayerList from "./widgets/PlayerList.js";
-import SettingsDialog from "./SettingsDialog.js";
+import PlayerList from "./widgets/PlayerList.jsx";
+import SettingsDialog from "./SettingsDialog.jsx";
 
 
 /**

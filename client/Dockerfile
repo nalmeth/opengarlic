@@ -24,8 +24,8 @@ COPY packages/shared /app/packages/shared
 
 # Pull these build args in, then reassign into env vars for npm build
 # Hack because these don't work just injected from .env file
-ARG REACT_APP_SOCKET_SERVER
-ENV REACT_APP_SOCKET_SERVER ${REACT_APP_SOCKET_SERVER}
+ARG VITE_SOCKET_SERVER
+ENV VITE_SOCKET_SERVER ${VITE_SOCKET_SERVER}
 
 RUN npm run build -w client
 

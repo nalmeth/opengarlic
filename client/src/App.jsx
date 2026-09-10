@@ -16,8 +16,8 @@ import '@fontsource/roboto/500.css';
 import '@fontsource/roboto/700.css';
 
 import './App.css';
-import Header from "./components/Header.js";
-import GameButton from "./components/widgets/GameButton.js";
+import Header from "./components/Header.jsx";
+import GameButton from "./components/widgets/GameButton.jsx";
 import { useSocketEvents } from "./modules/SocketEvents.js";
 
 /**

@@ -27,7 +27,7 @@ services:
       context: .
       dockerfile: client/Dockerfile
       args:
-        REACT_APP_SOCKET_SERVER: ${REACT_APP_SOCKET_SERVER}
+        VITE_SOCKET_SERVER: ${VITE_SOCKET_SERVER}
         LE_DOMAIN: ${LE_DOMAIN}
     env_file:
       - .env

@@ -2,4 +2,4 @@
 
 [Read the documentation](https://opengarlic.site)
 
-Documentation site is down.
+Documentation has been restored.

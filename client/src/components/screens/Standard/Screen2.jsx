@@ -1,8 +1,8 @@
 import React, { useEffect } from 'react';
 import Grid from "@mui/material/Unstable_Grid2/Grid2.js"
-import GameInput from "../../widgets/GameInput.js"
-import GameButton from "../../widgets/GameButton.js"
-import GameTimer from "../../widgets/GameTimer.js"
+import GameInput from "../../widgets/GameInput.jsx"
+import GameButton from "../../widgets/GameButton.jsx"
+import GameTimer from "../../widgets/GameTimer.jsx"
 import { removeStorageValue, useLocalStorage } from "../../../modules/Storage.js"
 
 const Screen2 = ({

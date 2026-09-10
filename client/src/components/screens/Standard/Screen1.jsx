@@ -1,8 +1,8 @@
 import Grid from "@mui/material/Unstable_Grid2/Grid2.js";
-import GameButton from "../../widgets/GameButton.js";
-import GameInput from "../../widgets/GameInput.js";
-import GameTimer from "../../widgets/GameTimer.js";
-import DrawingArea from "../../widgets/DrawingArea.js";
+import GameButton from "../../widgets/GameButton.jsx";
+import GameInput from "../../widgets/GameInput.jsx";
+import GameTimer from "../../widgets/GameTimer.jsx";
+import DrawingArea from "../../widgets/DrawingArea.jsx";
 import { useLocalStorage } from "../../../modules/Storage.js";
 
 const Screen1 = ({

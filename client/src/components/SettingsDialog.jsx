@@ -5,7 +5,7 @@ import {
 	Stack,
 	useMediaQuery
 } from "@mui/material";
-import GameButton from "./widgets/GameButton.js";
+import GameButton from "./widgets/GameButton.jsx";
 import Grid from "@mui/material/Unstable_Grid2/Grid2.js";
 import { isNumber } from "../modules/Helpers.js";
 

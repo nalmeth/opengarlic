@@ -1,8 +1,8 @@
 import Grid from '@mui/material/Unstable_Grid2';
 import { Divider, useMediaQuery } from "@mui/material";
 import { Stack } from "@mui/system";
-import DrawToolPanel from '../widgets/DrawingTools.js'
-import ColorPalette from "./ColorPalette.js";
+import DrawToolPanel from '../widgets/DrawingTools.jsx'
+import ColorPalette from "./ColorPalette.jsx";
 import { round2 } from "../../modules/Helpers.js";
 
 

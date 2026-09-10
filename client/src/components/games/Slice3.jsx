@@ -2,7 +2,7 @@ import Grid from '@mui/material/Unstable_Grid2';
 import { Typography } from "@mui/material";
 import React from 'react';
 import DrawingArea from "../widgets/DrawingArea";
-import GameNumericInput from "../widgets/GameNumericInput.js";
+import GameNumericInput from "../widgets/GameNumericInput.jsx";
 
 /**
  * Slice 3 Game Mode

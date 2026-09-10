@@ -1,8 +1,8 @@
 import React, { useState } from "react";
 import Grid from '@mui/material/Unstable_Grid2';
 import { Divider, Stack } from "@mui/material";
-import GameButton from "./widgets/GameButton.js";
-import GameInput from "./widgets/GameInput.js";
+import GameButton from "./widgets/GameButton.jsx";
+import GameInput from "./widgets/GameInput.jsx";
 
 /**
  * Create/Join Lobby Component(Page)

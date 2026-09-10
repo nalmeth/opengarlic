@@ -8,9 +8,9 @@ import { faCircleUser as CircleUser } from "@fortawesome/free-solid-svg-icons";
 import Bubble, {
 	BUBBLE_LEFT,
 	BUBBLE_RIGHT
-} from "../../widgets/Bubble.js";
-import PlayerList from "../../widgets/PlayerList.js";
-import GameButton from "../../widgets/GameButton.js";
+} from "../../widgets/Bubble.jsx";
+import PlayerList from "../../widgets/PlayerList.jsx";
+import GameButton from "../../widgets/GameButton.jsx";
 import { wordWrap } from "../../../modules/Helpers.js";
 import { useSocketEvents } from "../../../modules/SocketEvents.js";
 
