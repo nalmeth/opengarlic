@@ -19,4 +19,4 @@ RUN wget $(curl -S https://api.github.com/repos/socketio/socket.io-admin-ui/rele
 COPY server.js /app
 
 # Start the express server
-CMD ["npm", "start"];
+CMD ["npm", "start"]

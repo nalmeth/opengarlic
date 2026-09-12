@@ -623,23 +623,38 @@ export default DrawingBoard;
 
 /**
  * Renders a Flood Fill shape by compositing its colorless mask image with
- * its current fillColor (globalCompositeOperation: 'source-in'). Keeping
- * color out of the stored mask is what lets fillColor be changed later
- * without re-running the flood fill.
+ * its current fillColor onto an isolated offscreen canvas, then drawing
+ * that already-tinted result with a plain (default) draw. Keeping color
+ * out of the stored mask is what lets fillColor be changed later without
+ * re-running the flood fill. Doing the 'source-in' tinting on an isolated
+ * offscreen canvas - rather than directly on Konva's shared layer context -
+ * means that blend mode can never leak into how any other shape on the
+ * layer composites, and it's only redone when the mask/color/size actually
+ * change rather than on every layer redraw.
  * @prop {object} shape Shape data: x, y, width, height, fillColor, maskData, opacity
  * @returns {JSX.Element|null}
  */
 const FloodFillShape = React.memo(({ shape }) => {
-	const [maskImage, setMaskImage] = useState(null);
+	const [tintedCanvas, setTintedCanvas] = useState(null);
 
 	useEffect(() => {
 		if(!shape.maskData) return;
 		const img = new window.Image();
-		img.onload = () => setMaskImage(img);
+		img.onload = () => {
+			const canvas = document.createElement('canvas');
+			canvas.width = shape.width;
+			canvas.height = shape.height;
+			const offCtx = canvas.getContext('2d');
+			offCtx.drawImage(img, 0, 0, shape.width, shape.height);
+			offCtx.globalCompositeOperation = 'source-in';
+			offCtx.fillStyle = shape.fillColor;
+			offCtx.fillRect(0, 0, shape.width, shape.height);
+			setTintedCanvas(canvas);
+		};
 		img.src = shape.maskData;
-	}, [shape.maskData]);
+	}, [shape.maskData, shape.fillColor, shape.width, shape.height]);
 
-	if(!maskImage) return null;
+	if(!tintedCanvas) return null;
 
 	return (
 		<Shape
@@ -650,12 +665,9 @@ const FloodFillShape = React.memo(({ shape }) => {
 			opacity={shape.opacity}
 			listening={false}
 			sceneFunc={(ctx, node) => {
-				ctx.save();
-				ctx.drawImage(maskImage, 0, 0, shape.width, shape.height);
-				ctx.globalCompositeOperation = 'source-in';
-				ctx.fillStyle = shape.fillColor;
-				ctx.fillRect(0, 0, shape.width, shape.height);
-				ctx.restore();
+				// Plain draw, default 'source-over' compositing - nothing
+				// in here can affect how any other shape on the layer renders.
+				ctx.drawImage(tintedCanvas, 0, 0, shape.width, shape.height);
 			}}
 		/>
 	)

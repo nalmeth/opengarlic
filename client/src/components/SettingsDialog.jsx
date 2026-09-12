@@ -6,7 +6,7 @@ import {
 	useMediaQuery
 } from "@mui/material";
 import GameButton from "./widgets/GameButton.jsx";
-import Grid from "@mui/material/Unstable_Grid2/Grid2.js";
+import Grid from "@mui/material/Grid";
 import { isNumber } from "../modules/Helpers.js";
 
 const SettingsDialog = ({
@@ -56,10 +56,10 @@ const SettingsDialog = ({
 				{dialogSettings.map((setting, idx) => {
 					return (
 						<Grid container columns={2} key={idx}>
-							<Grid xs={1}>
+							<Grid size={1}>
 								<DialogContentText>{setting.displayName}:</DialogContentText>
 							</Grid>
-							<Grid xs={1}>
+							<Grid size={1}>
 								{setting.component({
 									initialValue: setting.default,
 									onUpdate: (value) => {

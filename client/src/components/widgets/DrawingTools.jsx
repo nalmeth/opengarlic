@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import Grid from '@mui/material/Unstable_Grid2';
+import Grid from '@mui/material/Grid';
 import {
 	Box,
 	IconButton,
@@ -88,20 +88,31 @@ export const DrawingTools = Object.freeze({
 });
 
 /**
- * Groups of tools that share a single toolbar slot. A group with one tool
- * renders as a plain button. A group with more than one tool renders as a
- * single button (last tool picked in that group) plus a small corner
- * flyout to switch between the group's variants - e.g. Fill / FloodFill.
+ * Groups of tools that share a single toolbar slot.
+ *
+ * - A group with one tool renders as a plain button.
+ * - A group with more than one tool renders as a single button (whichever
+ *   tool in the group was picked last, defaulting to the first) plus a
+ *   small corner flyout for switching between the group's variants.
+ *
+ * To add a new tool to the toolbar:
+ * 1. Add its definition to the `DrawingTools` object above (name, icon, tip).
+ * 2. Add that same key to ToolGroups below - either as its own single-item
+ *    array (own toolbar slot), or appended into an existing group's array
+ *    (shares a slot with those tools, switchable via the corner flyout).
+ *
+ * No other changes are needed for the toolbar itself to pick it up - the
+ * panel below renders directly off this list. (The tool will still need
+ * handling wherever tool-specific behavior lives, e.g. DrawingBoard.jsx's
+ * click/drag handlers and its shape-rendering switch.)
  */
 export const ToolGroups = [
 	['Brush'],
 	['Line'],
 	['Eraser'],
 	['Fill', 'FloodFill'],
-	['Rect'],
-	['RectFilled'],
-	['Circle'],
-	['CircleFilled']
+	['Rect', 'RectFilled'],
+	['Circle', 'CircleFilled']
 ];
 
 /**
@@ -123,9 +134,8 @@ const DrawToolPanel = ({
 		<>
 		<Grid container
 			direction="row"
-			justifyContent="flex-start"
-			alignItems="flex-start"
 			spacing={0.5}
+			sx={{ justifyContent: 'flex-start', alignItems: 'flex-start' }}
 		>
 			{ToolGroups.map(groupKeys => {
 				const tools = groupKeys.map(key => DrawingTools[key]);
@@ -215,7 +225,7 @@ const DrawToolButtonGroup = React.memo(({ tools, activeTool, onSelect }) => {
 	};
 
 	return (
-		<Grid xs="auto">
+		<Grid size="auto">
 			<Box sx={{ position: 'relative', display: 'inline-flex' }}>
 				<Tooltip title={selectedTool.tip}>
 					<IconButton
@@ -299,7 +309,7 @@ const DrawToolButton = React.memo(({
 		handleClick
 	}) => {
 	return (
-		<Grid xs="auto">
+		<Grid size="auto">
 			<Tooltip title={tip}>
 				<IconButton aria-label={label} onClick={handleClick} sx={{
 					color: active ? 'primary.dark' : 'inherit',

@@ -1,6 +1,6 @@
 import React, { useRef } from 'react';
-import Grid from '@mui/material/Unstable_Grid2';
-import { Divider, Typography, useMediaQuery } from '@mui/material';
+import Grid from '@mui/material/Grid';
+import { Divider, Stack, Typography, useMediaQuery } from '@mui/material';
 
 import { useLocalStorage } from './modules/Storage';
 import Games from './modules/Games';
@@ -182,14 +182,12 @@ const App = ({ socket }) => {
 	return (
 		<>
 		<Header	gameLobby={gameLobby} />
-		<Divider light />
+		<Divider sx={{ opacity: 0.6 }} />
 
 		<Grid
 			container
 			spacing={0}
-			justifyContent="center"
-			mb={5}
-			mt={isSmall ? 0 : 3}
+			sx={{ justifyContent: 'center', mb: 5, mt: isSmall ? 0 : 3 }}
 		>
 			{(gameLobby.appScreen === AppScreens.LOGIN) &&
 				<Login
@@ -223,16 +221,15 @@ const App = ({ socket }) => {
 			{(gameLobby.appScreen === AppScreens.LOBBY) &&
 				<>
 				<Grid
-					container
-					direction="column"
-					xs={12} sm={12} md={12} lg={9} xl={7}
+					size={{ xs: 12, sm: 12, md: 12, lg: 9, xl: 7 }}
 				>
-					<GameButton color="error" onClick={handleQuit}>Leave</GameButton>
-					<Grid
-						container
-						direction="row"
-					>
-						<Lobby
+					<Stack>
+						<GameButton color="error" onClick={handleQuit}>Leave</GameButton>
+						<Grid
+							container
+							direction="row"
+						>
+							<Lobby
 							{...gameLobby}
 							playerName={playerName}
 							onModeSelect={(mode, settings) => {
@@ -265,7 +262,8 @@ const App = ({ socket }) => {
 								});
 							}}
 						/>
-					</Grid>
+						</Grid>
+					</Stack>
 				</Grid>
 				</>
 			}
@@ -305,8 +303,4 @@ const App = ({ socket }) => {
 		</>
 	);
 }
-// App.whyDidYouRender = {
-// 	logOnDifferentValues: true,
-// 	customName: 'App'
-// };
 export default App;

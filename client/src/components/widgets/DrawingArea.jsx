@@ -57,9 +57,7 @@ const DrawingArea = (props) => {
 		<Grid
 			container
 			direction="row"
-			justifyContent="center"
-			alignItems="stretch"
-			gap={2}
+			sx={{ justifyContent: 'center', alignItems: 'stretch', gap: 2 }}
 		>
 			{props.showTools &&
 			<DrawingSidePanel

@@ -52,6 +52,9 @@ export const getConnection = async({ name, host, port, user, pass }) => {
 	});
 	clients[name].on('error', (err) => {
 		console.error(`${name}: Redis Client Error ${err}`);
+		if(err?.errors?.length) {
+			for(const inner of err.errors) console.error(`${name}:   -> ${inner}`);
+		}
 		clients[name].connected = false;
 	});
 

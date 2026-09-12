@@ -178,3 +178,40 @@ export const isInsideCircleStroke = (event, shape, scale) => {
 	// Calculates if a point is inside a circle given the circle center point and radius
 	return (x - cx) * (x - cx) + (y - cy) * (y - cy) <= r * r;
 }
+/**
+ * Convert a plain hex color string into {hex, rgb, hsv} form.
+ * Not currently required anywhere (react-color-palette's own setColor
+ * accepts a raw hex string directly), but kept as a general-purpose
+ * utility in case something else needs the full breakdown later.
+ * @param {string} hex e.g. '#fcea01' or '#f00'
+ * @returns {{hex: string, rgb: object, hsv: object}}
+ */
+export const hexToIColor = (hex) => {
+	let h = hex.replace('#', '');
+	if(h.length === 3) h = h.split('').map(c => c + c).join('');
+
+	const r = parseInt(h.substring(0, 2), 16);
+	const g = parseInt(h.substring(2, 4), 16);
+	const b = parseInt(h.substring(4, 6), 16);
+
+	const rN = r / 255, gN = g / 255, bN = b / 255;
+	const max = Math.max(rN, gN, bN), min = Math.min(rN, gN, bN);
+	const d = max - min;
+
+	let hue = 0;
+	if(d !== 0) {
+		if(max === rN) hue = ((gN - bN) / d) % 6;
+		else if(max === gN) hue = (bN - rN) / d + 2;
+		else hue = (rN - gN) / d + 4;
+		hue *= 60;
+		if(hue < 0) hue += 360;
+	}
+	const s = max === 0 ? 0 : d / max;
+	const v = max;
+
+	return {
+		hex: `#${h}`,
+		rgb: { r, g, b, a: 1 },
+		hsv: { h: hue, s: s * 100, v: v * 100, a: 1 }
+	};
+}

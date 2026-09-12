@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import Grid from '@mui/material/Unstable_Grid2';
+import Grid from '@mui/material/Grid';
 import {
 	Stack, Paper, Typography,
 	Button, useMediaQuery, Fab, Box
@@ -77,7 +77,7 @@ const Lobby = ({
 			breakpoints={{xs:8,sm:6,md:5}}
 		/>
 		<Grid
-			xs={4} sm={6} md={7}
+			size={{ xs: 4, sm: 6, md: 7 }}
 			sx={{
 				border: '1px solid #353535',
 				borderRadius: '0px 0px 10px 0px',
@@ -88,8 +88,7 @@ const Lobby = ({
 		>
 			<Stack
 				direction="column"
-				justifyContent="center"
-				alignItems="center"
+				sx={{ justifyContent: 'center', alignItems: 'center' }}
 			>
 				<Paper sx={{ height: 300, overflowX: 'hidden' }}>
 					<Grid
@@ -100,7 +99,7 @@ const Lobby = ({
 					{Games.map(mode => {
 						return (
 							<Grid
-								key={mode.title} xs={1} sm={2} md={1} lg={2}
+								key={mode.title} size={{ xs: 1, sm: 2, md: 1, lg: 2 }}
 								sx={{
 									border: `1px solid ${(mode.title===selectedMode?'#fcea01':'#353535')}`,
 									minHeight: 125,
@@ -117,8 +116,8 @@ const Lobby = ({
 								<Typography variant={isSmall ? 'body2' : 'body1'}>{mode.title}</Typography>
 								{owner === playerName &&
 								<Box
-									justifyContent="flex-end"
 									sx={{
+										justifyContent: 'flex-end',
 										minHeight: 80,
 										minWidth: 125,
 										position: 'relative'
@@ -171,7 +170,7 @@ const Lobby = ({
 					Array(15).fill(1).map((_,i) => {
 						return (
 							<Grid
-								key={i} xs={1} sm={2} md={1} lg={2}
+								key={i} size={{ xs: 1, sm: 2, md: 1, lg: 2 }}
 								sx={{
 									border: `1px solid ${(i===selectedMode?'#fcea01':'#353535')}`,
 									minHeight: 125,

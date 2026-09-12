@@ -1,5 +1,5 @@
-import Grid from '@mui/material/Unstable_Grid2';
-import { Typography } from "@mui/material";
+import Grid from '@mui/material/Grid';
+import { Typography, Stack } from "@mui/material";
 import React from 'react';
 import DrawingArea from "../widgets/DrawingArea";
 import GameNumericInput from "../widgets/GameNumericInput.jsx";
@@ -18,11 +18,9 @@ const Slice3 = (props) => {
 	return (
 		<>
 		<Typography>Slice3</Typography>
-		<Grid
-			container
+		<Stack
 			direction={props.gameScreen % 2 === 0 ? "row" : "column"}
-			justifyContent="center"
-			alignItems="stretch"
+			sx={{ justifyContent: 'center', alignItems: 'stretch' }}
 			spacing={2}
 		>
 			<Grid>
@@ -32,7 +30,7 @@ const Slice3 = (props) => {
 					displayShapes={[]}
 				/>
 			</Grid>
-		</Grid>
+		</Stack>
 		</>
 	)
 }

@@ -1,4 +1,4 @@
-import Grid from '@mui/material/Unstable_Grid2';
+import Grid from '@mui/material/Grid';
 import { Divider, useMediaQuery } from "@mui/material";
 import { Stack } from "@mui/system";
 import DrawToolPanel from '../widgets/DrawingTools.jsx'
@@ -30,7 +30,7 @@ const DrawingSidePanel = ({
 					resetTools={resetTools}
 				/>
 
-				{!isSmall && <Divider light />}
+				{!isSmall && <Divider sx={{ opacity: 0.6 }} />}
 
 				<ColorPalette setColor={color => {
 					if(color.length > 7) {

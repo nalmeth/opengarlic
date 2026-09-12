@@ -1,4 +1,4 @@
-import Grid from "@mui/material/Unstable_Grid2/Grid2.js";
+import Grid from "@mui/material/Grid";
 import GameButton from "../../widgets/GameButton.jsx";
 import GameInput from "../../widgets/GameInput.jsx";
 import GameTimer from "../../widgets/GameTimer.jsx";
@@ -62,10 +62,8 @@ const Screen1 = ({
 	return (
 		<>
 		<Grid
-			xs={12} mb={3} gap={4}
-			display="flex"
-			justifyContent="center"
-			alignItems="center"
+			size={12}
+			sx={{ mb: 3, gap: 4, display: 'flex', justifyContent: 'center', alignItems: 'center' }}
 		>
 			<GameInput
 				key="drawthis"
@@ -91,7 +89,7 @@ const Screen1 = ({
 			/>
 			<GameButton key="leavebtn" color="error" onClick={handleQuit}>Leave</GameButton>
 		</Grid>
-		<Grid display="flex">
+		<Grid sx={{ display: 'flex' }}>
 			{isDone ?
 				<img src={imgData || 'images/blank.png'} alt="current drawing"/> :
 				<DrawingArea

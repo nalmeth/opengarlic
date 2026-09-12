@@ -1,3 +1,4 @@
+import 'konva/canvas-backend';
 import Konva from 'konva';
 import { Canvas } from "canvas";
 import { rand } from "./Helpers.js";

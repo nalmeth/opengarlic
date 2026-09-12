@@ -4,7 +4,7 @@ import {
 	ListItem, ListItemAvatar, ListItemButton,
 	ListItemText, Tooltip, useMediaQuery
 } from "@mui/material"
-import Grid from "@mui/material/Unstable_Grid2/Grid2.js"
+import Grid from "@mui/material/Grid"
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import {
 	faCrown as CrownIcon,
@@ -34,10 +34,7 @@ const PlayerList = ({
 	return (
 		<>
 		<Grid
-			xs={breakpoints.xs}
-			sm={breakpoints.sm}
-			md={breakpoints.md}
-			lg={breakpoints.lg}
+			size={breakpoints}
 			sx={{
 				border: '1px solid #353535',
 				borderRadius: '10px 0 0 10px',
@@ -78,13 +75,11 @@ const PlayerList = ({
 
 							<ListItemText
 								primary={player.name}
-								primaryTypographyProps={{
-									variant: isSmall ? 'body2' : 'body1'
-								}}
 								secondary={player.owner ? 'Lobby Owner':`player ${i+1}`}
-								secondaryTypographyProps={{
-									variant: isSmall ? 'caption' : 'body2'
-							}}
+								slotProps={{
+									primary: { variant: isSmall ? 'body2' : 'body1' },
+									secondary: { variant: isSmall ? 'caption' : 'body2' }
+								}}
 							/>
 
 							{icons &&

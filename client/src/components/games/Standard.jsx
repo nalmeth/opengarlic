@@ -1,5 +1,6 @@
 import React, { useRef, useState } from 'react';
-import Grid from '@mui/material/Unstable_Grid2';
+import Grid from '@mui/material/Grid';
+import { Stack } from '@mui/material';
 import GameButton from "../widgets/GameButton.jsx";
 import Screen0 from "../screens/Standard/Screen0.jsx";
 import Screen1 from "../screens/Standard/Screen1.jsx";
@@ -198,9 +199,7 @@ const Standard = ({
 			<>
 			<Grid
 				container
-				justifyContent="flex-start"
-				alignItems="center"
-				direction="column"
+				sx={{ justifyContent: 'flex-start', alignItems: 'center' }}
 			>
 			{screenIndex === 0 &&
 				<Screen0
@@ -244,10 +243,7 @@ const Standard = ({
 			</Grid>
 			</>
 		:
-			<Grid
-				container
-				direction="column"
-			>
+			<Stack>
 				<GameButton color="error" onClick={handleQuit}>Quit</GameButton>
 				<Grid
 					container
@@ -268,13 +264,9 @@ const Standard = ({
 						}}
 					/>
 				</Grid>
-			</Grid>
+			</Stack>
 	)
 }
-// Standard.whyDidYouRender = {
-// 	logOnDifferentValues: true,
-// 	customName: 'Standard'
-// };
 
 export default Standard;
 

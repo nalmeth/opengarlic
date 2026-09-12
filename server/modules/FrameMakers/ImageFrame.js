@@ -1,3 +1,4 @@
+import 'konva/canvas-backend';
 import Konva from 'konva';
 import fs from 'node:fs/promises';
 import * as Frame from '../FrameFunctions.js';

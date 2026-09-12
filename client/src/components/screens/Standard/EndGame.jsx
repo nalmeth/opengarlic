@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import Grid from '@mui/material/Unstable_Grid2';
+import Grid from '@mui/material/Grid';
 import {
 	Avatar, Divider, List, ListItem, ListItemAvatar, Typography
 } from "@mui/material";
@@ -62,8 +62,7 @@ const StdEndGame = ({
 		<Grid
 			container
 			key="dataDisplay"
-			xs={8}
-			lg={9}
+			size={{ xs: 8, lg: 9 }}
 			sx={{
 				border: '1px solid #353535',
 				borderRadius: '0px 0px 10px 0px',
@@ -132,7 +131,7 @@ const StdEndGame = ({
 								}}
 								columns={12}
 							>
-								<Grid xs={1}>
+								<Grid size={1}>
 									<Typography variant="caption">{wordWrap(data.name, 8)}</Typography>
 									<ListItemAvatar>
 										<Avatar>
@@ -140,7 +139,7 @@ const StdEndGame = ({
 										</Avatar>
 									</ListItemAvatar>
 								</Grid>
-								<Grid xs={11}>
+								<Grid size={11}>
 									<Bubble side={BUBBLE_LEFT}>
 										<img src={data.value || 'images/blank.png'} width="100%" alt={key} />
 									</Bubble>
@@ -155,8 +154,8 @@ const StdEndGame = ({
 			})}
 			</List>
 
-			<Grid container sx={{ flexGrow: 1 }} mb={3}>
-				<Grid xs xsOffset={4} lgOffset={5}>
+			<Grid container sx={{ flexGrow: 1, mb: 3 }}>
+				<Grid size="grow" offset={{ xs: 4, lg: 5 }}>
 					<GameButton
 						onClick={() => {
 							setGifButtonDisabled(true);

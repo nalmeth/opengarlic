@@ -1,5 +1,5 @@
 import React, { useEffect } from 'react';
-import Grid from "@mui/material/Unstable_Grid2/Grid2.js";
+import Grid from "@mui/material/Grid";
 import GameInput from "../../widgets/GameInput.jsx";
 import GameButton from "../../widgets/GameButton.jsx";
 import GameTimer from "../../widgets/GameTimer.jsx";
@@ -54,10 +54,8 @@ const Screen0 = ({
 	return (
 		<>
 		<Grid
-			xs={12} mb={3} gap={4}
-			display="flex"
-			justifyContent="center"
-			alignItems="center"
+			size={12}
+			sx={{ mb: 3, gap: 4, display: 'flex', justifyContent: 'center', alignItems: 'center' }}
 		>
 			<GameInput
 				key="startingprompt"
@@ -67,7 +65,7 @@ const Screen0 = ({
 				disabled={isDone}
 				onUpdate={(data) => setPlayerData(data)}
 				value={playerData}
-				inputProps={{ maxLength: 60, tabIndex: 0 }}
+				slotProps={{ htmlInput: { maxLength: 60, tabIndex: 0 } }}
 			/>
 			<GameButton disabled={isDone} onClick={handleDone}>Done</GameButton>
 			<GameTimer

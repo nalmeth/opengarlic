@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import Grid from '@mui/material/Unstable_Grid2';
+import Grid from '@mui/material/Grid';
 import { Divider, Stack } from "@mui/material";
 import GameButton from "./widgets/GameButton.jsx";
 import GameInput from "./widgets/GameInput.jsx";
@@ -44,7 +44,7 @@ const Login = ({
 	return (
 		<React.Fragment>
 
-			<Grid xs={6} md={4}>
+			<Grid size={{ xs: 6, md: 4 }}>
 
 				<Stack spacing={2}>
 					<GameInput
@@ -54,7 +54,7 @@ const Login = ({
 						value={playerName}
 						error={nameError}
 						helperText={nameError && "Name must be at least 3 characters"}
-						inputProps={{ maxLength: 20, tabIndex: 0 }}
+						slotProps={{ htmlInput: { maxLength: 20, tabIndex: 0 } }}
 						onUpdate={value => {
 							const playerName = value.trim();
 
@@ -78,7 +78,7 @@ const Login = ({
 						}}
 					/>
 
-					<Divider light>THEN</Divider>
+					<Divider sx={{ opacity: 0.6 }}>THEN</Divider>
 
 					<GameButton
 						disabled={createDisabled}
@@ -88,7 +88,7 @@ const Login = ({
 						Create Lobby
 					</GameButton>
 
-					<Divider light>OR</Divider>
+					<Divider sx={{ opacity: 0.6 }}>OR</Divider>
 
 					<GameInput
 						label="Lobby Code"
@@ -96,7 +96,7 @@ const Login = ({
 						value={lobbyCode}
 						error={codeError}
 						helperText={codeError && "Code must be 6 characters"}
-						inputProps={{ maxLength: 6, tabIndex: 0 }}
+						slotProps={{ htmlInput: { maxLength: 6, tabIndex: 0 } }}
 						onUpdate={value => {
 							const code = value.trim();
 
