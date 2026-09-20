@@ -19,12 +19,15 @@ import './App.css';
 import Header from "./components/Header.jsx";
 import GameButton from "./components/widgets/GameButton.jsx";
 import { useSocketEvents } from "./modules/SocketEvents.js";
+import { useToast } from "./modules/ToastContext.jsx";
 
 /**
  * Main App Component
  * @returns {JSX.Element}
  */
 const App = ({ socket }) => {
+
+	const { showToast } = useToast();
 
 	// A clean/fresh lobby
 	const emptyLobby = Object.freeze({
@@ -75,11 +78,13 @@ const App = ({ socket }) => {
 			setGameLobby(prevLobby => emptyLobby);
 			setLobbyCode(prevCode => '');
 			setLobbyData(prevData => {});
+			showToast('You were removed from the lobby by the host.', 'warning');
 		},
 		BannedFromLobby: (lobby) => {
 			setGameLobby(prevLobby => emptyLobby);
 			setLobbyCode(prevCode => '');
 			setLobbyData(prevData => '');
+			showToast('You were banned from the lobby by the host.', 'error');
 		},
 		LobbyJoined: (name) => {
 			// console.log('LobbyJoined', name);
@@ -127,9 +132,22 @@ const App = ({ socket }) => {
 				setLobbyCode(prevCode => '');
 				setGameLobby(prevLobby => emptyLobby);
 				setLobbyData(prevData => {});
+				showToast(
+					typeof err.message === 'string' ? err.message : 'Could not join that lobby.',
+					'error'
+				);
 				return;
 			}
-			// console.log('Error from server:');
+
+			if(err.type === 'rate-limit') {
+				showToast("You're doing that too fast - please slow down a bit.", 'warning');
+				return;
+			}
+
+			showToast(
+				typeof err.message === 'string' ? err.message : 'Something went wrong.',
+				'error'
+			);
 			console.error(err);
 		}
 	});

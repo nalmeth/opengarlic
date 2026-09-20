@@ -6,6 +6,7 @@ import theme from './theme';
 import App from './App';
 import Socket from "./modules/Socket.js";
 import reportWebVitals from './reportWebVitals';
+import { ToastProvider } from './modules/ToastContext.jsx';
 
 const root = ReactDOM.createRoot(document.getElementById('root'));
 
@@ -13,7 +14,9 @@ root.render(
   <React.StrictMode>
 	<ThemeProvider theme={theme}>
 		<CssBaseline />
-		<App socket={Socket} />
+		<ToastProvider>
+			<App socket={Socket} />
+		</ToastProvider>
 	</ThemeProvider>
   </React.StrictMode>
 );

@@ -7,7 +7,7 @@ services:
       context: ./socketio.adminui
       dockerfile: Dockerfile
     ports:
-      - "85:85"
+      - "3005:3005"
     networks:
       - adminnet
 

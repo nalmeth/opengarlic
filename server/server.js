@@ -8,6 +8,7 @@ import { Server } from 'socket.io';
 import { instrument, RedisStore } from "@socket.io/admin-ui";
 import { getConnection, quitAll } from './modules/RedisConnectionManager.js';
 import IPMemLimit from "./modules/Middleware/IPMemLimit.js";
+import MessageLimiter from "./modules/MessageLimiter.js";
 import Logger from "./modules/Logger.js";
 import GameEventEmitter from './modules/GameEventEmitter.js';
 import './modules/GameEvents.js';
@@ -79,7 +80,17 @@ io.on('connection', (socket) => {
 	Logger.info(`Client Connect. Socket: ${socket.id} ${socket.handshake.address}`);
 
 	// Handle Game Messages
-	socket.on('message', (message) => {
+	socket.on('message', async (message) => {
+		try {
+			await MessageLimiter.consume(socket.id);
+		} catch(rejRes) {
+			socket.emit('error', {
+				type: 'rate-limit',
+				message: { 'retry-ms': rejRes.msBeforeNext }
+			});
+			return;
+		}
+
 		GameEventEmitter.emit(
 			message.type,
 			io, socket,

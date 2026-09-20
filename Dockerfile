@@ -13,7 +13,7 @@ libtool \
 autoconf \
 automake
 
-RUN wget $(curl -S https://api.github.com/repos/ImageOptim/gifski/releases/latest | grep 'browser_download_url.*xz' | cut -d'"' -f4) -O /tmp/gifski.tar.xz && \
+RUN wget $(curl -S https://api.github.com/repos/ImageOptim/gifski/releases/tags/1.34.0 | grep 'browser_download_url.*xz' | cut -d'"' -f4) -O /tmp/gifski.tar.xz && \
 tar -xvf /tmp/gifski.tar.xz --strip-components=1 linux/gifski -C /tmp && \
 mv /tmp/gifski /usr/local/bin && \
 chown root:root /usr/local/bin/gifski && \
@@ -33,7 +33,6 @@ RUN npm ci --workspace=server --workspace=packages/shared
 
 COPY ./server /app/server
 COPY ./packages/shared /app/packages/shared
-COPY .env /app
 COPY ./fonts /root/.fonts
 
 CMD ["npm", "run", "start", "-w", "server"]

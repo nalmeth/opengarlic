@@ -102,6 +102,13 @@ const DrawingBoard = (props) => {
 	const [shapes, setShapes] = useState(initShapes);
 	// Flag indicating active drawing
 	const isDrawing = useRef(false);
+	// The Konva node for whichever shape is currently being drawn (only
+	// meaningful while isDrawing.current is true)
+	const drawingNodeRef = useRef(null);
+	// Buffers the latest shape update computed during a drag; applied to
+	// the Konva node directly for smooth performance, then committed to
+	// React state exactly once when the drag ends.
+	const pendingUpdateRef = useRef(null);
 
 	// Handle passing shape data up
 	useEffect(() => {
@@ -169,9 +176,41 @@ const DrawingBoard = (props) => {
 		]));
 	}
 
-	// For now these just toggle our drawing flag
-	const handleMouseUp = () => { isDrawing.current = false;	}
-	const handleMouseLeave = () => { isDrawing.current = false; }
+	/**
+	 * Apply a shape-property update directly to the actively-drawing Konva
+	 * node, bypassing React state, and buffer it for a single final commit
+	 * once the drag ends. This is what keeps drawing smooth - without it,
+	 * every mousemove during a stroke triggers a full React re-render of
+	 * every shape already on the canvas, which gets slower as more gets
+	 * drawn over the course of a round.
+	 * @param {object} data Key/value pairs of properties to update
+	 */
+	const applyDrawingUpdate = (data) => {
+		pendingUpdateRef.current = { ...pendingUpdateRef.current, ...data };
+		if(drawingNodeRef.current) {
+			drawingNodeRef.current.setAttrs(data);
+			drawingNodeRef.current.getLayer()?.batchDraw();
+		}
+	}
+
+	/**
+	 * Commit whatever was buffered during the drag into React state, once,
+	 * and reset drawing-related refs. Shared by mouse-up and mouse-leave -
+	 * a stroke that ends by dragging off the canvas still needs to commit,
+	 * or the last few points would only exist on the Konva node and be
+	 * lost the next time React re-renders from its (stale) state.
+	 */
+	const commitDrawing = () => {
+		if(pendingUpdateRef.current) {
+			updateShape(shapes.length - 1, pendingUpdateRef.current);
+		}
+		pendingUpdateRef.current = null;
+		drawingNodeRef.current = null;
+		isDrawing.current = false;
+	}
+
+	const handleMouseUp = () => { commitDrawing(); }
+	const handleMouseLeave = () => { commitDrawing(); }
 
 	/**
 	 * Handle when the mouse is moving
@@ -202,24 +241,28 @@ const DrawingBoard = (props) => {
 		switch(props.tool.name) {
 
 			case DrawingTools.Brush.name:
-			case DrawingTools.Eraser.name:
-				// Previous x,y coord
-				const lastX = currentShape.points[shapesLen-2];
-				const lastY = currentShape.points[shapesLen-1];
+			case DrawingTools.Eraser.name: {
+				// Read from the pending buffer (this drag's accumulated
+				// points so far) rather than shapes state, which no longer
+				// updates during the drag.
+				const currentPoints = pendingUpdateRef.current?.points || currentShape.points;
+				const lastX = currentPoints[currentPoints.length - 2];
+				const lastY = currentPoints[currentPoints.length - 1];
 
 				// Don't spam the array
 				if(lastX === pointX && lastY === pointY) return;
 
 				// Add current cursor (x,y) into the shape's points array.
-				updateShape(shapesLen - 1, {
+				applyDrawingUpdate({
 					points: [
-						...currentShape.points,
+						...currentPoints,
 						pointX, pointY
 					]
 				});
 				break;
+			}
 
-			case DrawingTools.Line.name:
+			case DrawingTools.Line.name: {
 
 				//  Get copy of points from last shape,
 				//  update the second point to the cursor (x,y).
@@ -227,11 +270,12 @@ const DrawingBoard = (props) => {
 				newLinePoints[2] = pointX;
 				newLinePoints[3] = pointY;
 
-				updateShape(shapesLen - 1, { points: newLinePoints });
+				applyDrawingUpdate({ points: newLinePoints });
 				break;
+			}
 
 			case DrawingTools.Rect.name:
-			case DrawingTools.RectFilled.name:
+			case DrawingTools.RectFilled.name: {
 
 				// Get copy of points from last shape,
 				// update the second point to the cursor (x,y).
@@ -244,7 +288,7 @@ const DrawingBoard = (props) => {
 				const width = pointX - newRectPoints[0];
 				const height = pointY - newRectPoints[1];
 
-				updateShape(shapesLen - 1, {
+				applyDrawingUpdate({
 					tool: props.tool.name,
 					fillColor: props.brushColor,
 					points: newRectPoints,
@@ -252,9 +296,10 @@ const DrawingBoard = (props) => {
 					height
 				});
 				break;
+			}
 
 			case DrawingTools.Circle.name:
-			case DrawingTools.CircleFilled.name:
+			case DrawingTools.CircleFilled.name: {
 
 				// Calculate radius from known center and (x,y) coordinate
 				const radius = Math.round(Math.sqrt(
@@ -262,13 +307,14 @@ const DrawingBoard = (props) => {
 					Math.pow(pointY - currentShape.points[1], 2)
 				));
 
-				updateShape(shapes.length - 1, {
+				applyDrawingUpdate({
 					tool: props.tool.name,
 					fillColor: props.brushColor,
 					points: [...currentShape.points],
 					radius
 				});
 				break;
+			}
 
 			default:
 				break;
@@ -548,6 +594,7 @@ const DrawingBoard = (props) => {
 									return (
 										<Line
 											key={idx}
+											ref={node => { if(node && idx === shapes.length - 1) drawingNodeRef.current = node; }}
 											points={shape.points}
 											stroke={shape.tool === DrawingTools.Eraser.name ? '#fff': shape.brushColor}
 											strokeWidth={shape.strokeWidth}
@@ -568,6 +615,7 @@ const DrawingBoard = (props) => {
 									return (
 										<Rect
 											key={idx}
+											ref={node => { if(node && idx === shapes.length - 1) drawingNodeRef.current = node; }}
 											stroke={shape.brushColor}
 											strokeWidth={shape.strokeWidth}
 											opacity={shape.opacity}
@@ -588,6 +636,7 @@ const DrawingBoard = (props) => {
 									return (
 										<Circle
 											key={idx}
+											ref={node => { if(node && idx === shapes.length - 1) drawingNodeRef.current = node; }}
 											x={shape.points[0]}
 											y={shape.points[1]}
 											stroke={shape.brushColor}
